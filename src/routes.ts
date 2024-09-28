@@ -2,7 +2,7 @@
     @type {string[]}
  */
 
-export const authRoutes = [
+export const publicRoutes = [
   "/sign-in",
   "/sign-in/email",
   "/sign-in/forgot-password",
@@ -10,6 +10,7 @@ export const authRoutes = [
   "/sign-in/magic/error",
   "/sign-up",
   "/reset-password",
+  "/"
 ];
 
-export const DEFAULT_LOGIN_REDIRECT = "/";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard";

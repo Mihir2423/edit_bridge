@@ -1,9 +1,5 @@
-import { auth, signIn } from "@/auth";
-import prisma from "@/lib/db";
 import { loginWithMagicLinkUseCase } from "@/use-cases/magic-link";
 import { createSessionUseCase } from "@/use-cases/users";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import crypto from "crypto";
 
 export async function GET(req: Request): Promise<Response> {
   try {

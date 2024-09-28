@@ -1,5 +1,5 @@
 
-import { DEFAULT_LOGIN_REDIRECT, authRoutes } from "@/routes";
+import { DEFAULT_LOGIN_REDIRECT, publicRoutes } from "@/routes";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
@@ -10,7 +10,7 @@ export default auth((req) => {
     console.log("isAuthenticated", isAuthenticated);
     
     
-    const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+    const isAuthRoute = publicRoutes.includes(nextUrl.pathname);
     if (nextUrl.pathname.startsWith('/api')) {
         return NextResponse.next(); // Allow the request to proceed
     }
