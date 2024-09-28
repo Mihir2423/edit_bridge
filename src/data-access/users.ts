@@ -22,7 +22,7 @@ export async function createUser(
 export async function createMagicUser(email: string) {
   const salt = crypto.randomBytes(128).toString("base64");
   const user = await prisma.user.create({
-    data: { email, emailVerified: new Date(), salt },
+    data: { email, emailVerified: new Date(), userType: "editor", salt },
   });
   await prisma.account.create({
     data: {
@@ -42,10 +42,16 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
-export async function setEmailVerified(userId: string) {
+export async function setEmailVerified(
+  userId: string,
+  magicUser: boolean = false
+) {
+  const data = magicUser
+    ? { emailVerified: new Date() }
+    : { emailVerified: new Date(), userType: "editor" };
   const user = await prisma.user.update({
     where: { id: userId },
-    data: { emailVerified: new Date() },
+    data,
   });
   return user;
 }

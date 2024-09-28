@@ -39,7 +39,7 @@ export async function loginWithMagicLinkUseCase(token: string) {
   }
   const existingUser = await getUserByEmail(magicLinkInfo.email);
   if (existingUser) {
-    await setEmailVerified(existingUser.id);
+    await setEmailVerified(existingUser.id, true);
     await deleteMagicLinkByToken(token);
     return existingUser;
   } else {
