@@ -1,27 +1,28 @@
-
 import { DEFAULT_LOGIN_REDIRECT, publicRoutes } from "@/routes";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
 export default auth((req) => {
-    const { nextUrl } = req;
+  const { nextUrl } = req;
 
-    const isAuthenticated = !!req.auth;
-    console.log("isAuthenticated", isAuthenticated);
-    
-    
-    const isAuthRoute = publicRoutes.includes(nextUrl.pathname);
-    if (nextUrl.pathname.startsWith('/api')) {
-        return NextResponse.next(); // Allow the request to proceed
-    }
+  const isAuthenticated = !!req.auth;
+  const userType = req.auth?.user?.userType;
+  console.log(userType, "userType Middleware");
 
-    if (isAuthRoute && isAuthenticated)
-        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  console.log("isAuthenticated", isAuthenticated);
 
-    if (!isAuthenticated && !isAuthRoute)
-        return NextResponse.redirect(new URL("/sign-in", nextUrl));
+  const isAuthRoute = publicRoutes.includes(nextUrl.pathname);
+  if (nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.next(); // Allow the request to proceed
+  }
+
+  if (isAuthRoute && isAuthenticated)
+    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+
+  if (!isAuthenticated && !isAuthRoute)
+    return NextResponse.redirect(new URL("/sign-in", nextUrl));
 });
 
 export const config = {
-    matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
-}
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};
