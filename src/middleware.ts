@@ -18,12 +18,18 @@ export default auth((req) => {
 
   const isRoleRoute = nextUrl.pathname === ROLE_ROUTE;
 
-  if (isAuthenticated && (userType === null || userType === undefined) && !isRoleRoute) {
+  if (
+    isAuthenticated &&
+    (userType === null || userType === undefined) &&
+    !isRoleRoute
+  ) {
     return NextResponse.redirect(new URL(ROLE_ROUTE, nextUrl));
   }
- 
 
-  if (isAuthRoute && isAuthenticated)
+  if (
+    (isAuthRoute && isAuthenticated) ||
+    (isRoleRoute && isAuthenticated && userType)
+  )
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
 
   if (!isAuthenticated && !isAuthRoute)

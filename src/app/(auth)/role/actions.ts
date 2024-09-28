@@ -36,8 +36,8 @@ export const setRoleAction = authenticatedAction
         await signIn("google");
       }
     }
-
     await setUserRole(user.id, input.userType);
+
     return { success: true };
   });
 

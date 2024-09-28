@@ -6,13 +6,17 @@ import { PenToolIcon, EditIcon, Loader2 } from "lucide-react";
 import { useServerAction } from "zsa-react";
 import { setRoleAction } from "../actions";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 export default function RoleSelector() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-
+  const { data: session, update } = useSession();
   const { execute, isPending } = useServerAction(setRoleAction, {
     onError({ err }) {
       toast.message("Something went wrong");
+    },
+    onSuccess() {
+      toast.success("Role updated successfully");
     },
   });
 
@@ -20,10 +24,24 @@ export default function RoleSelector() {
     setSelectedRole(role);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (selectedRole) {
       console.log(`Confirmed role: ${selectedRole}`);
-      execute({ userType: selectedRole });
+      await execute({ userType: selectedRole });
+      const result = await update({
+        ...session,
+        user: {
+          ...session?.user,
+          userType: selectedRole,
+        },
+      });
+
+      if (result) {
+        console.log("Session updated:", result);
+        toast.success("Session refreshed");
+      } else {
+        toast.error("Failed to update session");
+      }
       // Here you can add logic to proceed with the selected role
     }
   };
