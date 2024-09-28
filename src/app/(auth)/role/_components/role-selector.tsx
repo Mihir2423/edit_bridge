@@ -42,7 +42,6 @@ export default function RoleSelector() {
       } else {
         toast.error("Failed to update session");
       }
-      // Here you can add logic to proceed with the selected role
     }
   };
 
