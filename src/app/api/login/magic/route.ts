@@ -1,5 +1,4 @@
 import { loginWithMagicLinkUseCase } from "@/use-cases/magic-link";
-import { createSessionUseCase } from "@/use-cases/users";
 
 export async function GET(req: Request): Promise<Response> {
   try {
@@ -22,8 +21,6 @@ export async function GET(req: Request): Promise<Response> {
         },
       });
     }
-    // create a session
-    await createSessionUseCase(user.id, user.salt);
     return new Response(null, {
       status: 302,
       headers: {
