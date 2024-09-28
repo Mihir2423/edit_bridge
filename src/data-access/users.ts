@@ -83,3 +83,18 @@ export async function updatePassword(
     data: { password: hash, salt },
   });
 }
+
+export async function setUserRole(userId: string, role: string) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { userType: role },
+  });
+}
+
+
+export async function getUserAccount(userId: string) {
+  const accounts = await prisma.account.findMany({
+    where: { userId },
+  });
+  return accounts;
+}

@@ -13,4 +13,6 @@ export const publicRoutes = [
   "/"
 ];
 
+export const ROLE_ROUTE = "/role";
+
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard";

@@ -1,4 +1,4 @@
-import { DEFAULT_LOGIN_REDIRECT, publicRoutes } from "@/routes";
+import { DEFAULT_LOGIN_REDIRECT, publicRoutes, ROLE_ROUTE } from "@/routes";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
@@ -15,6 +15,13 @@ export default auth((req) => {
   if (nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next(); // Allow the request to proceed
   }
+
+  const isRoleRoute = nextUrl.pathname === ROLE_ROUTE;
+
+  if (isAuthenticated && (userType === null || userType === undefined) && !isRoleRoute) {
+    return NextResponse.redirect(new URL(ROLE_ROUTE, nextUrl));
+  }
+ 
 
   if (isAuthRoute && isAuthenticated)
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));

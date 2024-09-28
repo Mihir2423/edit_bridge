@@ -1,17 +1,19 @@
 import { applicationName } from "@/app-config";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { upsertMagicLink } from "@/data-access/magic-links";
 import {
- createPasswordResetToken,
- deletePasswordResetToken,
- getPasswordResetToken,
+  createPasswordResetToken,
+  deletePasswordResetToken,
+  getPasswordResetToken,
 } from "@/data-access/reset-tokens";
 import { deleteSessionUseCase } from "@/data-access/sessions";
 import {
- createUser,
- getUserByEmail,
- updatePassword,
- verifyPassword,
+  createUser,
+  getUserAccount,
+  getUserByEmail,
+  setUserRole,
+  updatePassword,
+  verifyPassword,
 } from "@/data-access/users";
 import { createTransaction } from "@/data-access/utils";
 import { MagicLinkEmail } from "@/emails/magic-link";
@@ -20,6 +22,7 @@ import { sendEmail } from "@/lib/send-email";
 import crypto from "crypto";
 import { LoginError } from "./errors";
 import { hashPassword } from "./utils";
+import prisma from "@/lib/db";
 
 export async function registerUserUseCase(email: string, password: string) {
   const existingUser = await getUserByEmail(email);
@@ -94,3 +97,20 @@ export async function changePasswordUseCase(token: string, password: string) {
     await deleteSessionUseCase(userId, trx);
   });
 }
+
+export const setRoleUseCase = async (userType: string) => {
+  const session = await auth();
+  console.log(session?.user.email);
+  if (session && session?.user.email) {
+    const user = await getUserByEmail(session?.user.email);
+    if (user) {
+      if (userType === "creator") {
+        const account = await getUserAccount(user.id);
+        if (!account) {
+          throw new Error("Account not found, Please Sign In to google to continue.");
+        }
+      }
+      await setUserRole(user.id, userType);
+    }
+  }
+};
