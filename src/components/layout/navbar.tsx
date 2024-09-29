@@ -38,9 +38,11 @@ export const Navbar = async () => {
               <h1 className="text-right font-normal text-[#0D062D] text-sm">
                 {currentUser?.name}
               </h1>
-              <p className="text-right font-normal text-[#787486] text-sm">
-                {currentUser?.city}, {currentUser?.country}
-              </p>
+              {currentUser?.city && (
+                <p className="text-right font-normal text-[#787486] text-sm">
+                  {currentUser?.city}, {currentUser?.country}
+                </p>
+              )}
             </div>
           )}
           <div className="flex items-center gap-[10px]">
@@ -57,7 +59,10 @@ export const Navbar = async () => {
                   height={18}
                 />
               </PopoverTrigger>
-              <PopoverContent align="end" className="flex flex-col gap-2 border border-black w-[190px]">
+              <PopoverContent
+                align="end"
+                className="flex flex-col gap-2 border border-black w-[190px]"
+              >
                 <Link
                   href="/profile"
                   type="button"
@@ -67,11 +72,14 @@ export const Navbar = async () => {
                 </Link>
                 <form
                   action={async () => {
-                    "use server";                    
+                    "use server";
                     await signOut();
                   }}
                 >
-                  <button type="submit" className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md hover:scale-[1.05] w-full text-left transition-all duration-150 ease-in-out">
+                  <button
+                    type="submit"
+                    className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md hover:scale-[1.05] w-full text-left transition-all duration-150 ease-in-out"
+                  >
                     <LogOut size={18} /> Logout
                   </button>
                 </form>
