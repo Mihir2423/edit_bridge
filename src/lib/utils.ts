@@ -8,7 +8,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getImageData(event: ChangeEvent<HTMLInputElement>) {
   const file = event.target.files?.[0];
-  console.log("file", file);
   const displayUrl = file ? URL.createObjectURL(file) : "";
   const fileSize = file ? convertBytes(file.size) : "";
   return { displayUrl, file, fileSize };
@@ -37,7 +36,7 @@ export const AuthenticationError = class AuthenticationError extends Error {
 
 export const isCharacterLimitExceeded = (profileData: ProfileData): boolean => {
   if (profileData.about.length > 300) return true;
-  return profileData.previousWorks.some(
+  return (profileData.previousWork ?? []).some(
     (work) => work.description.length > 200
   );
 };

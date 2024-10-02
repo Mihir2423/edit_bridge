@@ -1,8 +1,10 @@
 declare interface Work {
+ id: number;
+ userId: string;
  title: string;
- image: string;
  description: string;
- link: string;
+ url: string;
+ platform?: string; 
 }
 
 declare interface ProfileData {
@@ -13,7 +15,7 @@ declare interface ProfileData {
  instagramUrl: string;
  twitterUrl: string;
  email: string;
- previousWorks?: Work[];
+ previousWork?: WorkWithoutIds[];
 }
 
 declare interface User {
@@ -25,5 +27,11 @@ declare interface User {
  country?: string;
  bio?: string;
  socials?: string[]
- previousWorks?: Work[];
+ previousWork?: Work[];
+}
+
+declare type WorkWithoutIds = Omit<Work, 'id' | 'userId'>;
+
+declare interface UserWithoutWorkIds extends Omit<User, 'previousWork'> {
+  previousWork?: WorkWithoutIds[];
 }

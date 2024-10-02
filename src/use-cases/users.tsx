@@ -35,9 +35,7 @@ export async function registerUserUseCase(email: string, password: string) {
   if (!user) {
     throw new Error("Error creating user");
   }
-  console.log("User created", user.id);
   const token = await upsertMagicLink(email);
-  console.log("Verify email token created", token);
 
   await sendEmail(
     email,
@@ -104,7 +102,6 @@ export const getCurrentUserUseCase = async (userId: string) => {
 
 export const setRoleUseCase = async (userType: string) => {
   const session = await auth();
-  console.log(session?.user.email);
   if (session && session?.user.email) {
     const user = await getUserByEmail(session?.user.email);
     if (user) {

@@ -47,7 +47,6 @@ const ForgotPasswordPage = (props: Props) => {
 
   function onSubmit(values: z.infer<typeof fortgotPasswordSchema>) {
     execute(values);
-    console.log(values);
   }
   return (
     <AuthLayout

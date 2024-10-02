@@ -10,6 +10,7 @@ type Props = {};
 const ProfilePage = async (props: Props) => {
   const session = await assertAuthenticated();
   const currentUser = await getCurrentUserUseCase(session?.id);
+  
   return (
     <Suspense fallback={<ProfilePreloader />}>
       <div className="">

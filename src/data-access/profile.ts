@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 
-export async function updateProfile(data: User) {
+export async function updateProfile(data: UserWithoutWorkIds) {
+ 
   const res = await prisma.user.update({
     where: { id: data.id },
     data: {
@@ -13,11 +14,11 @@ export async function updateProfile(data: User) {
       previousWork: {
         deleteMany: {},
         create:
-          data?.previousWorks?.map((work) => ({
+          data?.previousWork?.map((work) => ({
             title: work.title,
             description: work.description,
-            url: work.link,
-            platform: "default",
+            url: work.url,
+            platform: work.platform || "Default",
           })) || [],
       },
     },

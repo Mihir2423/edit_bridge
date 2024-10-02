@@ -38,9 +38,11 @@ export async function createMagicUser(email: string) {
 export async function getUserById(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
+    include: {
+      previousWork: true,
+    },
   });
-  console.log("User", user);
-  
+
   return user;
 }
 

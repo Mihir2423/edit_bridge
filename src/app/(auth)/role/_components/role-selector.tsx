@@ -26,7 +26,6 @@ export default function RoleSelector() {
 
   const handleConfirm = async () => {
     if (selectedRole) {
-      console.log(`Confirmed role: ${selectedRole}`);
       await execute({ userType: selectedRole });
       const result = await update({
         ...session,
@@ -37,7 +36,6 @@ export default function RoleSelector() {
       });
 
       if (result) {
-        console.log("Session updated:", result);
         toast.success("Session refreshed");
       } else {
         toast.error("Failed to update session");

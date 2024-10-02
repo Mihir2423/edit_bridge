@@ -6,8 +6,8 @@ import { Upload } from "lucide-react";
 interface ProfileHeaderProps {
   profileData: ProfileData;
   setProfileData: React.Dispatch<React.SetStateAction<ProfileData>>;
-  profilePicture: string;
-  setProfilePicture: React.Dispatch<React.SetStateAction<string>>;
+  profilePicture: string | undefined;
+  setProfilePicture: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -37,7 +37,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     <div className="flex items-center space-x-4">
       <div className="relative border-[3px] border-black rounded-full w-32 h-32">
         <Image
-          src={profilePicture}
+          src={profilePicture || "/demos/profile-pic.png"}
           alt="Profile Picture"
           layout="fill"
           objectFit="cover"
