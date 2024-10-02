@@ -24,10 +24,6 @@ const platformOptions = [
   "Behance",
   "Dribbble",
   "GitHub",
-  "CodePen",
-  "Vimeo",
-  "Medium",
-  "DeviantArt",
 ];
 
 export const PreviousWorks: React.FC<PreviousWorksProps> = ({
@@ -88,23 +84,33 @@ export const PreviousWorks: React.FC<PreviousWorksProps> = ({
               placeholder="Title of your work"
             />
             <div className="flex items-start gap-3 w-full">
-              <Select
-                value={work.platform}
-                onValueChange={(value) =>
-                  handleWorkChange(index, "platform", value)
-                }
-              >
-                <SelectTrigger className="w-[148px]">
-                  <SelectValue placeholder="Select platform" />
-                </SelectTrigger>
-                <SelectContent>
-                  {platformOptions.map((platform) => (
-                    <SelectItem key={platform} value={platform.toLowerCase()}>
-                      {platform}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col gap-2 h-full">
+                <Select
+                  value={work.platform}
+                  onValueChange={(value) =>
+                    handleWorkChange(index, "platform", value)
+                  }
+                >
+                  <SelectTrigger className="w-[148px]">
+                    <SelectValue placeholder="Select platform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {platformOptions.map((platform) => (
+                      <SelectItem key={platform} value={platform.toLowerCase()}>
+                        {platform}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Image
+                  src={`/images/${work.platform ? work.platform : "Default"}.jpg`}
+                  alt={work.platform || "default"}
+                  className="rounded-md"
+                  width={148}
+                  height={140}
+                  style={{height: 101}}
+                />
+              </div>
               <div className="flex flex-col flex-1 gap-2">
                 <div>
                   <Textarea
