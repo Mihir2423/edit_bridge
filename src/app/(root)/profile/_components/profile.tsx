@@ -28,12 +28,14 @@ export const Profile = () => {
     email: "editor@example.com",
     previousWorks: [
       {
+        title: "Work 1",
         image: "/demos/thumbnail.jpg",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quam voluptates, et necessitatibus.",
         link: "https://example.com/work1",
       },
       {
+        title: "Work 2",
         image: "/demos/thumbnail.jpg",
         description:
           "Qui harum, non mollitia ab commodi dolorum quis cupiditate dolores.",
@@ -85,8 +87,8 @@ export const Profile = () => {
 
   const handleSave = () => {
     if (isCharacterLimitExceeded()) {
-     console.log("I a, here");
-     
+      console.log("I a, here");
+
       toast.error("Character limit exceeded");
       return;
     }
@@ -172,44 +174,59 @@ export const Profile = () => {
             {profileData.previousWorks.map((work, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 border-gray-400 p-4 border rounded-md w-full"
+                className="flex flex-col items-start gap-3 border-gray-400 p-4 border rounded-md w-full"
               >
-                <Image
-                  alt="Work Thumbnail"
-                  src={work.image}
-                  width={150}
-                  height={190}
-                  className="rounded-md w-[148px] h-[155px]"
+                <Input
+                  value={work.title}
+                  onChange={(e) => {
+                    const newWorks = [...profileData.previousWorks];
+                    newWorks[index].title = e.target.value;
+                    setProfileData((prev) => ({
+                      ...prev,
+                      previousWorks: newWorks,
+                    }));
+                  }}
+                  className="font-semibold text-xl"
+                  placeholder="Title of your work"
                 />
-                <div className="flex flex-col flex-1 gap-2">
-                  <div>
-                    <Textarea
-                      value={work.description}
-                      onChange={(e) =>
-                        handleWorkDescriptionChange(index, e.target.value)
-                      }
-                      className={`resize-none ${work.description.length > 200 ? "border-red-500" : ""}`}
-                      placeholder="Describe your work"
-                      rows={3}
-                    />
-                    <div
-                      className={`text-sm mt-1 ${work.description.length > 200 ? "text-red-500" : "text-gray-500"}`}
-                    >
-                      {work.description.length}/200 characters
-                    </div>
-                  </div>
-                  <Input
-                    value={work.link}
-                    onChange={(e) => {
-                      const newWorks = [...profileData.previousWorks];
-                      newWorks[index].link = e.target.value;
-                      setProfileData((prev) => ({
-                        ...prev,
-                        previousWorks: newWorks,
-                      }));
-                    }}
-                    placeholder="Link to your work"
+                <div className="flex items-start gap-3 w-full">
+                  <Image
+                    alt="Work Thumbnail"
+                    src={work.image}
+                    width={150}
+                    height={190}
+                    className="rounded-md w-[148px] h-[155px]"
                   />
+                  <div className="flex flex-col flex-1 gap-2">
+                    <div>
+                      <Textarea
+                        value={work.description}
+                        onChange={(e) =>
+                          handleWorkDescriptionChange(index, e.target.value)
+                        }
+                        className={`resize-none ${work.description.length > 200 ? "border-red-500" : ""}`}
+                        placeholder="Describe your work"
+                        rows={3}
+                      />
+                      <div
+                        className={`text-sm mt-1 ${work.description.length > 200 ? "text-red-500" : "text-gray-500"}`}
+                      >
+                        {work.description.length}/200 characters
+                      </div>
+                    </div>
+                    <Input
+                      value={work.link}
+                      onChange={(e) => {
+                        const newWorks = [...profileData.previousWorks];
+                        newWorks[index].link = e.target.value;
+                        setProfileData((prev) => ({
+                          ...prev,
+                          previousWorks: newWorks,
+                        }));
+                      }}
+                      placeholder="Link to your work"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
