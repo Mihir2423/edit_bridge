@@ -34,3 +34,10 @@ export const AuthenticationError = class AuthenticationError extends Error {
     this.name = "AuthenticationError";
   }
 };
+
+export const isCharacterLimitExceeded = (profileData: ProfileData): boolean => {
+  if (profileData.about.length > 300) return true;
+  return profileData.previousWorks.some(
+    (work) => work.description.length > 200
+  );
+};

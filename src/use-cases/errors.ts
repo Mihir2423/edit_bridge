@@ -11,6 +11,13 @@ export class AuthenticationError extends PublicError {
     }
 }
 
+export class UnauthorizedError extends PublicError {
+    constructor() {
+        super("You are not authorized to do this action");
+        this.name = "UnauthorizedError";
+    }
+}
+
 export class EmailInUseError extends PublicError {
     constructor() {
         super("Email is already in use");
