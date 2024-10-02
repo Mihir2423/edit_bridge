@@ -41,26 +41,22 @@ export async function loginWithMagicLinkUseCase(token: string) {
   const existingUser = await getUserByEmail(magicLinkInfo.email);
   if (existingUser) {
     await setEmailVerified(existingUser.id, true);
-    console.log("HERE");
 
     await signIn("credentials", {
       id: existingUser.id,
       salt: existingUser.salt,
       redirect: false,
     });
-    console.log("HERE");
 
     await deleteMagicLinkByToken(token);
     return existingUser;
   } else {
     const newUser = await createMagicUser(magicLinkInfo.email);
-    console.log("HERE NEW");
     await signIn("credentials", {
       id: newUser.id,
       salt: newUser.salt,
       redirect: false,
     });
-    console.log("HERE NEW");
     await deleteMagicLinkByToken(token);
     return newUser;
   }

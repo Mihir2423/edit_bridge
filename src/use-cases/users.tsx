@@ -11,6 +11,7 @@ import {
   createUser,
   getUserAccount,
   getUserByEmail,
+  getUserById,
   setUserRole,
   updatePassword,
   verifyPassword,
@@ -22,7 +23,6 @@ import { sendEmail } from "@/lib/send-email";
 import crypto from "crypto";
 import { LoginError } from "./errors";
 import { hashPassword } from "./utils";
-import prisma from "@/lib/db";
 
 export async function registerUserUseCase(email: string, password: string) {
   const existingUser = await getUserByEmail(email);
@@ -35,9 +35,7 @@ export async function registerUserUseCase(email: string, password: string) {
   if (!user) {
     throw new Error("Error creating user");
   }
-  console.log("User created", user.id);
   const token = await upsertMagicLink(email);
-  console.log("Verify email token created", token);
 
   await sendEmail(
     email,
@@ -98,16 +96,21 @@ export async function changePasswordUseCase(token: string, password: string) {
   });
 }
 
+export const getCurrentUserUseCase = async (userId: string) => {
+  return await getUserById(userId);
+};
+
 export const setRoleUseCase = async (userType: string) => {
   const session = await auth();
-  console.log(session?.user.email);
   if (session && session?.user.email) {
     const user = await getUserByEmail(session?.user.email);
     if (user) {
       if (userType === "creator") {
         const account = await getUserAccount(user.id);
         if (!account) {
-          throw new Error("Account not found, Please Sign In to google to continue.");
+          throw new Error(
+            "Account not found, Please Sign In to google to continue."
+          );
         }
       }
       await setUserRole(user.id, userType);

@@ -35,6 +35,17 @@ export async function createMagicUser(email: string) {
   return user;
 }
 
+export async function getUserById(id: string) {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      previousWork: true,
+    },
+  });
+
+  return user;
+}
+
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({
     where: { email },
@@ -90,7 +101,6 @@ export async function setUserRole(userId: string, role: string) {
     data: { userType: role },
   });
 }
-
 
 export async function getUserAccount(userId: string) {
   const accounts = await prisma.account.findMany({
