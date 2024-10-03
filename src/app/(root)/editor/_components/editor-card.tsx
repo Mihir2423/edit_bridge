@@ -28,7 +28,6 @@ export const EditorCard = async ({ data }: { data: Profile }) => {
           {data?.bio ?? "Editor Bio"}
         </p>
         <div className="gap-2 grid grid-cols-2 w-full">
-          <Button className="flex items-center gap-2 col-span-1 w-full">
           {!isInRequestList(currUser?.id, data?.request_received) && (
             <HireBtn editorId={data?.id} />
           )}
