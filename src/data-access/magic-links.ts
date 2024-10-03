@@ -1,3 +1,5 @@
+import "server-only"
+
 import { TOKEN_LENGTH, TOKEN_TTL } from "@/app-config";
 import { generateRandomToken } from "./utils";
 import prisma from "@/lib/db";

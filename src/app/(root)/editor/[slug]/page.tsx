@@ -13,6 +13,8 @@ import { InstagramLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { CheckCircle, ExternalLink, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { HireBtn } from "../_components/hire-btn";
+import { isInRequestList } from "@/lib/utils";
 
 type Props = {
   params: {
@@ -21,8 +23,33 @@ type Props = {
 };
 
 const EditorDetailPage = async ({ params }: Props) => {
+  if (!params.slug || params.slug === "" || params.slug === "null") {
+    return (
+      <Card className="mx-auto my-20 p-10 w-[400px]">
+        <p className="font-xs text-gray-400">Error</p>
+        <h1 className="font-semibold text-xl">
+          {" User hasn't completed his profile."}
+        </h1>
+        <Button asChild className="mt-4">
+          <Link href="/editor">Go Back</Link>
+        </Button>
+      </Card>
+    );
+  }
   const session = await assertAuthenticated();
   const user = await getUserBySlugUseCase(session, params.slug);
+
+  if (!user) {
+    return (
+      <Card className="mx-auto my-20 p-10 w-[400px]">
+        <p className="font-xs text-gray-400">Error</p>
+        <h1 className="font-semibold text-xl">{"User not found."}</h1>
+        <Button asChild className="mt-4">
+          <Link href="/editor">Go Back</Link>
+        </Button>
+      </Card>
+    );
+  }
   return (
     <>
       <BreadCrumb
@@ -65,7 +92,9 @@ const EditorDetailPage = async ({ params }: Props) => {
                     className="rounded-md"
                   />
                   <div className="flex flex-col gap-2">
-                    <h1 className="font-semibold text-xl">{item.title ?? "Title"}</h1>
+                    <h1 className="font-semibold text-xl">
+                      {item.title ?? "Title"}
+                    </h1>
                     <p className="text-sm">
                       {item.description ?? "Description not available."}
                     </p>
@@ -90,10 +119,11 @@ const EditorDetailPage = async ({ params }: Props) => {
               <Mail size={16} />
             </Button>
           </div>
-          <Button className="w-28">
-            <CheckCircle className="mr-2 w-4 h-4" />
-            Hire
-          </Button>
+          <div className="w-fit">
+            {!isInRequestList(session?.id, user?.request_received, user?.request_send) && (
+              <HireBtn editorId={user?.id} />
+            )}
+          </div>
         </CardFooter>
       </Card>
     </>

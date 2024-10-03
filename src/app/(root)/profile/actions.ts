@@ -1,7 +1,8 @@
 "use server";
 
 import { auth } from "@/auth";
-import { unauthenticatedAction } from "@/lib/safe-action";
+import { generateUniqueSlug } from "@/data-access/utils";
+import { authenticatedAction } from "@/lib/safe-action";
 import { updateProfileUseCase } from "@/use-cases/profile";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -13,7 +14,7 @@ const WorkSchema = z.object({
   platform: z.string().optional(),
 });
 
-export const updateProfileAction = unauthenticatedAction
+export const updateProfileAction = authenticatedAction
   .createServerAction()
   .input(
     z.object({
@@ -30,6 +31,7 @@ export const updateProfileAction = unauthenticatedAction
   )
   .handler(async ({ input }) => {
     const session = await auth();
-    await updateProfileUseCase(session, input);
+    const slug = await generateUniqueSlug(input.name);
+    await updateProfileUseCase(session, {...input, slug});
     revalidatePath('/dashboard');
   });

@@ -1,3 +1,5 @@
+import "server-only"
+
 import prisma from "@/lib/db";
 import crypto from "node:crypto";
 import slugify from "slugify";
@@ -25,9 +27,16 @@ export async function createTransaction<T extends typeof prisma>(
   await prisma.$transaction(cb as any);
 }
 
-export async function generateUniqueSlug(name: string): Promise<string> {
-  let slug = slugify(name, { lower: true, strict: true });
-  let uniqueSlug = slug;
+export async function generateUniqueSlug(name: string | null): Promise<string> {
+ let baseSlug: string;
+ if (!name || name.trim() === '') {
+   // If no name is provided, use 'user' as the base slug
+   baseSlug = 'user';
+ } else {
+   baseSlug = slugify(name, { lower: true, strict: true });
+ }
+
+ let uniqueSlug = baseSlug;
   let counter = 1;
 
   while (true) {
@@ -39,7 +48,7 @@ export async function generateUniqueSlug(name: string): Promise<string> {
       return uniqueSlug;
     }
 
-    uniqueSlug = `${slug}-${counter}`;
+    uniqueSlug = `${baseSlug}-${counter}`;
     counter++;
   }
 }

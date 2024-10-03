@@ -1,3 +1,5 @@
+import "server-only"
+
 import { applicationName } from "@/app-config";
 import { auth, signIn } from "@/auth";
 import { upsertMagicLink } from "@/data-access/magic-links";
