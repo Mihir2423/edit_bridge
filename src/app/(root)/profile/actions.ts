@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { updateProfileUseCase } from "@/use-cases/profile";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const WorkSchema = z.object({
@@ -30,4 +31,5 @@ export const updateProfileAction = unauthenticatedAction
   .handler(async ({ input }) => {
     const session = await auth();
     await updateProfileUseCase(session, input);
+    revalidatePath('/dashboard');
   });

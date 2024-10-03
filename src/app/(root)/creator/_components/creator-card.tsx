@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { SquareMousePointer, User } from "lucide-react";
 import Link from "next/link";
 
-export const EditorCard = ({ data }: { data: Profile }) => {
+export const CreatorCard = ({ data }: { data: Profile }) => {
   return (
     <Card className="relative flex flex-col gap-4 shadow-md p-4 rounded-md group">
       <div className="flex flex-col items-center gap-2">
@@ -16,19 +16,19 @@ export const EditorCard = ({ data }: { data: Profile }) => {
         </div>
         <div className="flex flex-col">
           <h1 className="font-semibold text-base text-black leading-[12px]">
-            {data?.name ?? "Editor Name"}
+            {data?.name ?? "Creator Name"}
           </h1>
-          <h4 className="text-center text-gray-500 text-xs">{"editor_name"}</h4> 
+          <h4 className="text-center text-gray-500 text-xs">{"creator_name"}</h4> 
         </div>
         <p className="font-normal text-[#787486] text-center text-sm">
-          {data?.bio ?? "Editor Bio"}
+          {data?.bio ?? "Creator Bio"}
         </p>
         <div className="gap-2 grid grid-cols-2 w-full">
           <Button className="flex items-center gap-2 col-span-1 w-full">
-            Hire <User size={16} />
+            Apply <User size={16} />
           </Button>
           <Button asChild className="flex items-center gap-2 col-span-1 w-full">
-            <Link href={`/editor/${data?.slug}`}>
+            <Link href={`/creator/${data?.slug}`}>
               View <SquareMousePointer size={16} />
             </Link>
           </Button>

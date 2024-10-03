@@ -92,7 +92,7 @@ const EditorDetailPage = async ({ params }: Props) => {
           </div>
           <Button className="w-28">
             <CheckCircle className="mr-2 w-4 h-4" />
-            Hire
+            Apply
           </Button>
         </CardFooter>
       </Card>

@@ -30,6 +30,26 @@ declare interface User {
  previousWork?: Work[];
 }
 
+declare type Profile = {
+ id: string;
+ name: string | null;
+ email: string;
+ emailVerified: Date | null;
+ image: string | null;
+ password: string | null;
+ role: string | null;
+ bio: string | null;
+ userType: string | null
+ salt: string | null;
+ socials: string[];
+ createdAt: Date;
+ updatedAt: Date;
+ city: string | null;
+ country: string | null;
+ slug: string
+};
+
+
 declare type WorkWithoutIds = Omit<Work, 'id' | 'userId'>;
 
 declare interface UserWithoutWorkIds extends Omit<User, 'previousWork'> {
