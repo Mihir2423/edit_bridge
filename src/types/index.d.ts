@@ -16,6 +16,7 @@ declare interface ProfileData {
   twitterUrl: string;
   email: string;
   request_received: { senderId: string }[];
+  request_send: { receiverId: string }[];
   previousWork?: WorkWithoutIds[];
 }
 
@@ -30,6 +31,7 @@ declare interface User {
   slug?: string | null;
   socials?: string[];
   request_received: { senderId: string }[];
+  request_send: { receiverId: string }[];
   previousWork?: Work[];
 }
 
@@ -48,6 +50,7 @@ declare type Profile = {
   createdAt: Date;
   updatedAt: Date;
   request_received: { senderId: string }[];
+  request_send: { receiverId: string }[];
   city: string | null;
   country: string | null;
   slug: string;

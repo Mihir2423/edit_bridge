@@ -120,7 +120,7 @@ const EditorDetailPage = async ({ params }: Props) => {
             </Button>
           </div>
           <div className="w-fit">
-            {!isInRequestList(session?.id, user?.request_received) && (
+            {!isInRequestList(session?.id, user?.request_received, user?.request_send) && (
               <HireBtn editorId={user?.id} />
             )}
           </div>

@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SquareMousePointer, User } from "lucide-react";
-import Link from "next/link";
-import { HireBtn } from "./hire-btn";
 import { assertAuthenticated } from "@/lib/session";
 import { isInRequestList } from "@/lib/utils";
+import { SquareMousePointer } from "lucide-react";
+import Link from "next/link";
+import { HireBtn } from "./hire-btn";
 
 export const EditorCard = async ({ data }: { data: Profile }) => {
   const currUser = await assertAuthenticated();
@@ -28,12 +28,14 @@ export const EditorCard = async ({ data }: { data: Profile }) => {
           {data?.bio ?? "Editor Bio"}
         </p>
         <div className="gap-2 grid grid-cols-2 w-full">
-          {!isInRequestList(currUser?.id, data?.request_received) && (
-            <HireBtn editorId={data?.id} />
-          )}
+          {!isInRequestList(
+            currUser?.id,
+            data?.request_received,
+            data?.request_send
+          ) && <HireBtn editorId={data?.id} />}
           <Button
             asChild
-            className={`flex items-center gap-2 ${isInRequestList(currUser?.id, data?.request_received) ? "col-span-2" : "col-span-1"} w-full`}
+            className={`flex items-center gap-2 ${isInRequestList(currUser?.id, data?.request_received, data?.request_send) ? "col-span-2" : "col-span-1"} w-full`}
           >
             <Link href={`/editor/${data?.slug}`}>
               View <SquareMousePointer size={16} />
