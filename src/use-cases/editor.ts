@@ -1,4 +1,9 @@
-import { getAllEditors, getUserBySlug, getAllCreators } from "@/data-access/editor";
+import {
+  getAllEditors,
+  getUserBySlug,
+  getAllCreators,
+  hireEditor,
+} from "@/data-access/editor";
 import { AuthenticationError } from "@/lib/utils";
 import { Session } from "next-auth";
 
@@ -29,4 +34,14 @@ export async function getUserBySlugUseCase(
   }
   const res = await getUserBySlug(slug);
   return res;
+}
+
+export async function hireEditorUseCase(
+  session: Session | null,
+  id: string
+) {
+  if (!session) {
+    throw new AuthenticationError();
+  }
+  await hireEditor(session, id);
 }

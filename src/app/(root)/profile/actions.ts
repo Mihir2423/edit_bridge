@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { generateUniqueSlug } from "@/data-access/utils";
-import { unauthenticatedAction } from "@/lib/safe-action";
+import { authenticatedAction } from "@/lib/safe-action";
 import { updateProfileUseCase } from "@/use-cases/profile";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -14,7 +14,7 @@ const WorkSchema = z.object({
   platform: z.string().optional(),
 });
 
-export const updateProfileAction = unauthenticatedAction
+export const updateProfileAction = authenticatedAction
   .createServerAction()
   .input(
     z.object({

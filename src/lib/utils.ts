@@ -40,3 +40,7 @@ export const isCharacterLimitExceeded = (profileData: ProfileData): boolean => {
     (work) => work.description.length > 200
   );
 };
+
+export const isInRequestList = (senderId: string, requestArr: { senderId: string }[]): boolean => {
+  return requestArr.some((request) => request.senderId === senderId);
+}
