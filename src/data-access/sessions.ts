@@ -1,3 +1,5 @@
+import "server-only"
+
 import prisma from "@/lib/db";
 
 export const deleteSessionUseCase = async (userId: string, trx = prisma) => {

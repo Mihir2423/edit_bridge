@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
+import { generateUniqueSlug } from "@/data-access/utils";
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { updateProfileUseCase } from "@/use-cases/profile";
 import { revalidatePath } from "next/cache";
@@ -30,6 +31,7 @@ export const updateProfileAction = unauthenticatedAction
   )
   .handler(async ({ input }) => {
     const session = await auth();
-    await updateProfileUseCase(session, input);
+    const slug = await generateUniqueSlug(input.name);
+    await updateProfileUseCase(session, {...input, slug});
     revalidatePath('/dashboard');
   });

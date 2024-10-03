@@ -26,6 +26,7 @@ declare interface User {
  city?: string;
  country?: string;
  bio?: string;
+ slug?: string | null
  socials?: string[]
  previousWork?: Work[];
 }

@@ -1,3 +1,5 @@
+import "server-only"
+
 import prisma from "@/lib/db";
 
 export async function updateProfile(data: UserWithoutWorkIds) {
@@ -10,6 +12,7 @@ export async function updateProfile(data: UserWithoutWorkIds) {
       city: data?.city,
       country: data?.country,
       bio: data?.bio,
+      slug: data?.slug,
       socials: data?.socials,
       previousWork: {
         deleteMany: {},

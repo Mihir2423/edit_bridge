@@ -21,6 +21,19 @@ type Props = {
 };
 
 const EditorDetailPage = async ({ params }: Props) => {
+  if (!params.slug || params.slug === "" || params.slug === "null") {
+    return (
+      <Card className="mx-auto my-20 p-10 w-[400px]">
+        <p className="font-xs text-gray-400">Error</p>
+        <h1 className="font-semibold text-xl">
+         {" User hasn't completed his profile."}
+        </h1>
+        <Button asChild className="mt-4">
+          <Link href="/editor">Go Back</Link>
+        </Button>
+      </Card>
+    );
+  }
   const session = await assertAuthenticated();
   const user = await getUserBySlugUseCase(session, params.slug);
   return (
@@ -65,7 +78,9 @@ const EditorDetailPage = async ({ params }: Props) => {
                     className="rounded-md"
                   />
                   <div className="flex flex-col gap-2">
-                    <h1 className="font-semibold text-xl">{item.title ?? "Title"}</h1>
+                    <h1 className="font-semibold text-xl">
+                      {item.title ?? "Title"}
+                    </h1>
                     <p className="text-sm">
                       {item.description ?? "Description not available."}
                     </p>

@@ -1,3 +1,5 @@
+import "server-only";
+
 import prisma from "@/lib/db";
 import { hashPassword } from "@/use-cases/utils";
 import crypto from "crypto";
