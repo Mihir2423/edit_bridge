@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -8,29 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/lib/utils";
+import { requestsUseCase } from "@/use-cases/editor";
 import { CheckCircle, EyeIcon, XCircle } from "lucide-react";
 
-const ManagePage = () => {
-  const requests = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      date: "12 Nov, 2024",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      date: "13 Nov, 2024",
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      date: "14 Nov, 2024",
-    },
-  ];
+const ManagePage = async () => {
+  const session = await auth();
+  if (!session) {
+    return <Card className="shadow-lg mx-auto max-w-4xl">Please sign in</Card>;
+  }
+  const requests = await requestsUseCase(session);
+  console.log(requests);
 
   return (
     <div className="mx-auto px-4 py-8 container">
@@ -60,45 +49,59 @@ const ManagePage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {requests.map((request) => (
-                  <TableRow
-                    key={request.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <TableCell className="py-4 font-medium">
-                      {request.name}
-                    </TableCell>
-                    <TableCell className="py-4">{request.email}</TableCell>
-                    <TableCell className="py-4">{request.date}</TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex justify-end items-center gap-2">
-                        <Button
-                          size="sm"
-                          className="bg-green-500 hover:bg-green-600"
-                        >
-                          <CheckCircle className="mr-1 w-4 h-4" />
-                          Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-red-50 border-red-500 text-red-500"
-                        >
-                          <XCircle className="mr-1 w-4 h-4" />
-                          Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-blue-50 border-blue-500 text-blue-500"
-                        >
-                          <EyeIcon className="mr-1 w-4 h-4" />
-                          View
-                        </Button>
+                {(requests ?? []).length !== 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      <div className="pt-5 text-center text-gray-500 text-sm">
+                        <p>No pending requests</p>
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  (requests ?? []).map((request) => (
+                    <TableRow
+                      key={request?.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <TableCell className="py-4 font-medium">
+                        {request?.sender?.name}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        {request?.sender?.email}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        {formatDate(`${request?.createdAt}`)}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex justify-end items-center gap-2">
+                          <Button
+                            size="sm"
+                            className="bg-green-500 hover:bg-green-600"
+                          >
+                            <CheckCircle className="mr-1 w-4 h-4" />
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="hover:bg-red-50 border-red-500 text-red-500"
+                          >
+                            <XCircle className="mr-1 w-4 h-4" />
+                            Reject
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="hover:bg-blue-50 border-blue-500 text-blue-500"
+                          >
+                            <EyeIcon className="mr-1 w-4 h-4" />
+                            View
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>

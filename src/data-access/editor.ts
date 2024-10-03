@@ -52,6 +52,7 @@ async function getUserById(id: string) {
     include: {
       previousWork: true,
       request_send: true,
+      request_received: true,
     },
   });
   return editor;
@@ -193,4 +194,39 @@ export async function applyAsEditor(session: Session, id: string) {
   });
 
   return applyRequest;
+}
+
+async function getEditorRequestsByUserId(id: string) {
+  const editor = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      request_received: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+          sender: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return editor;
+}
+
+export async function getEditorRequests(userId: string) {
+  const editor = await getEditorRequestsByUserId(userId);
+  if (!editor) {
+    throw new Error("Editor not found");
+  }
+  // get the requests recieved
+  const requests = editor.request_received ?? [];
+
+  return requests;
 }

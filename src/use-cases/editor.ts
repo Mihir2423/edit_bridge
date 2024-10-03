@@ -1,9 +1,12 @@
+import "server-only";
+
 import {
   getAllEditors,
   getUserBySlug,
   getAllCreators,
   hireEditor,
   applyAsEditor,
+  getEditorRequests,
 } from "@/data-access/editor";
 import { AuthenticationError } from "@/lib/utils";
 import { Session } from "next-auth";
@@ -52,4 +55,12 @@ export async function applyAsEditorUseCase(
     throw new AuthenticationError();
   }
   await applyAsEditor(session, id);
+}
+
+export async function requestsUseCase(session: Session) {
+  if (!session) {
+    throw new AuthenticationError();
+  }
+  const res = await getEditorRequests(session.user.id);
+  return res;
 }
