@@ -49,7 +49,7 @@ const ManagePage = async () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(requests ?? []).length !== 0 ? (
+                {(requests ?? []).length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <div className="pt-5 text-center text-gray-500 text-sm">
