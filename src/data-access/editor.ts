@@ -25,7 +25,7 @@ export async function getAllEditors() {
   return editors;
 }
 export async function getAllCreators() {
-  const editors = await prisma.user.findMany({
+  const creators = await prisma.user.findMany({
     where: {
       userType: "creator",
     },
@@ -42,7 +42,78 @@ export async function getAllCreators() {
       },
     },
   });
-  return editors;
+  return creators;
+}
+
+export async function getMyCreators(userId: string) {
+  const myCreators = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      editors: {
+        select: {
+          creator: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              slug: true,
+              bio: true,
+              image: true,
+              request_received: {
+                select: {
+                  senderId: true,
+                },
+              },
+              request_send: {
+                select: {
+                  receiverId: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  
+  return myCreators?.editors ?? [];
+}
+export async function getMyEditors(userId: string) {
+  const myEditors = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      creators: {
+        select: {
+          editor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              slug: true,
+              bio: true,
+              image: true,
+              request_received: {
+                select: {
+                  senderId: true,
+                },
+              },
+              request_send: {
+                select: {
+                  receiverId: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  
+  return myEditors?.creators ?? [];
 }
 
 async function getUserById(id: string) {
@@ -306,8 +377,8 @@ export async function handleRequests({
   }
   // approve or reject the request
   if (type === "approve") {
-    // if userType is editor, connect the creator to the editor
-    if (request.sender.userType === "editor") {
+    // if userType is creator, connect the creator to the editor
+    if (request.sender.userType === "creator") {
       await createTransaction(async (prisma) => {
         await prisma.request.update({
           where: {
@@ -329,7 +400,7 @@ export async function handleRequests({
         });
       });
     } else {
-      // if userType is creator, connect the editor to the creator
+      // if userType is editor, connect the editor to the creator
       await createTransaction(async (prisma) => {
         await prisma.request.update({
           where: {
