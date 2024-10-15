@@ -1,36 +1,26 @@
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { CheckCircle, EyeIcon, XCircle } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { requestsUseCase } from "@/use-cases/editor";
+import { RequestsTable } from "./_components/request-table";
 
-const ManagePage = () => {
-  const requests = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      date: "12 Nov, 2024",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      date: "13 Nov, 2024",
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      date: "14 Nov, 2024",
-    },
-  ];
+const ManagePage = async () => {
+  const session = await auth();
+  if (!session) {
+    return <Card className="shadow-lg mx-auto max-w-4xl">Please sign in</Card>;
+  }
+
+  const editorRequests = await requestsUseCase(session);
+  console.log(editorRequests);
+
+  const receivedRequests =
+    editorRequests.filter(
+      (req) => req.type === "received" && req.status === "pending"
+    ) || [];
+  const sentRequests =
+    editorRequests.filter(
+      (req) => req.type === "sent" && req.status === "pending"
+    ) || [];
 
   return (
     <div className="mx-auto px-4 py-8 container">
@@ -41,67 +31,22 @@ const ManagePage = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gray-100">
-                  <TableHead className="py-4 font-semibold text-base text-gray-700">
-                    Name
-                  </TableHead>
-                  <TableHead className="py-4 font-semibold text-base text-gray-700">
-                    Email
-                  </TableHead>
-                  <TableHead className="py-4 font-semibold text-base text-gray-700">
-                    Date
-                  </TableHead>
-                  <TableHead className="text-right py-4 font-semibold text-base text-gray-700">
-                    Actions
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {requests.map((request) => (
-                  <TableRow
-                    key={request.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <TableCell className="py-4 font-medium">
-                      {request.name}
-                    </TableCell>
-                    <TableCell className="py-4">{request.email}</TableCell>
-                    <TableCell className="py-4">{request.date}</TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex justify-end items-center gap-2">
-                        <Button
-                          size="sm"
-                          className="bg-green-500 hover:bg-green-600"
-                        >
-                          <CheckCircle className="mr-1 w-4 h-4" />
-                          Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-red-50 border-red-500 text-red-500"
-                        >
-                          <XCircle className="mr-1 w-4 h-4" />
-                          Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="hover:bg-blue-50 border-blue-500 text-blue-500"
-                        >
-                          <EyeIcon className="mr-1 w-4 h-4" />
-                          View
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <Tabs defaultValue="received" className="w-full">
+            <TabsList className="grid grid-cols-2 w-full">
+              <TabsTrigger value="received">Received</TabsTrigger>
+              <TabsTrigger value="sent">Sent</TabsTrigger>
+            </TabsList>
+            <TabsContent value="received">
+              <div className="overflow-x-auto">
+                <RequestsTable requests={receivedRequests} isSent={false} />
+              </div>
+            </TabsContent>
+            <TabsContent value="sent">
+              <div className="overflow-x-auto">
+                <RequestsTable requests={sentRequests} isSent={true} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
       <p className="mt-4 text-center text-gray-500 text-sm">

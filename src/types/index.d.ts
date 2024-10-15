@@ -61,3 +61,11 @@ declare type WorkWithoutIds = Omit<Work, "id" | "userId">;
 declare interface UserWithoutWorkIds extends Omit<User, "previousWork"> {
   previousWork?: WorkWithoutIds[];
 }
+
+declare type Requests = {
+  id: string;
+  createdAt: Date;
+  status: string;
+  user: { slug: string | null; name: string | null; email: string; id: string };
+  type: string;
+};

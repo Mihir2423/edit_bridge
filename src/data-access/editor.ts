@@ -52,6 +52,7 @@ async function getUserById(id: string) {
     include: {
       previousWork: true,
       request_send: true,
+      request_received: true,
     },
   });
   return editor;
@@ -193,4 +194,140 @@ export async function applyAsEditor(session: Session, id: string) {
   });
 
   return applyRequest;
+}
+
+async function getEditorRequestsByUserId(id: string) {
+  const editor = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      userType: true,
+      request_received: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+          sender: {
+            select: {
+              name: true,
+              email: true,
+              slug: true,
+              id: true,
+            },
+          },
+        },
+      },
+      request_send: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+          receiver: {
+            select: {
+              name: true,
+              email: true,
+              id: true,
+              slug: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return editor;
+}
+
+export async function getEditorRequests(userId: string) {
+  const editor = await getEditorRequestsByUserId(userId);
+  if (!editor) {
+    throw new Error("User not found");
+  }
+
+  // Determine which requests to use based on userType
+  const requests = [...editor.request_received, ...editor.request_send];
+
+  // Use a type guard to determine the shape of each request
+  const flattenedRequests = requests.map((request) => {
+    if ("sender" in request) {
+      return {
+        id: request.id,
+        createdAt: request.createdAt,
+        status: request.status,
+        user: request.sender,
+        type: "received",
+      };
+    } else {
+      return {
+        id: request.id,
+        createdAt: request.createdAt,
+        status: request.status,
+        user: request.receiver,
+        type: "sent",
+      };
+    }
+  });
+
+  return flattenedRequests;
+}
+
+export async function handleRequests({
+  type,
+  userId,
+  requestId,
+}: {
+  type: string;
+  userId: string;
+  requestId: string;
+}) {
+  // get the request
+  const request = await prisma.request.findUnique({
+    where: {
+      id: requestId,
+    },
+    include: {
+      sender: true,
+      receiver: true,
+    },
+  });
+  if (!request) {
+    throw new Error("Request not found");
+  }
+  // check if the user is not the sender
+  if (type === "cancel") {
+    if (request.receiver.id === userId) {
+      throw new Error("You cannot handle this request");
+    }
+  } else {
+    if (request.sender.id === userId) {
+      throw new Error("You cannot handle this request");
+    }
+  }
+  // approve or reject the request
+  if (type === "approve") {
+    await prisma.request.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: "approved",
+      },
+    });
+  } else if (type === "reject") {
+    // delete request
+    await prisma.request.delete({
+      where: {
+        id: requestId,
+      },
+    });
+  } else if (type === "cancel") {
+    // delete request
+    await prisma.request.delete({
+      where: {
+        id: requestId,
+      },
+    });
+  } else {
+    throw new Error("Invalid request type");
+  }
 }

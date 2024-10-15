@@ -19,7 +19,7 @@ export const Sidebar = async () => {
 
   return (
     <aside className="top-0 left-0 z-[2] sticky border-[#DBDBDB] border-r w-[280px] h-screen">
-      <div className="flex justify-between items-center border-[#DBDBDB] px-5 border-b h-[72px]">
+      <div className="flex justify-between items-center px-5 h-[72px]">
         <div className="flex items-center gap-2">
           <Image src="/images/logo.svg" width={24} height={24} alt="Logo" />
           <h1 className="font-semibold text-[#0D062D] text-xl">Edit.Bridge</h1>
