@@ -38,7 +38,7 @@ model User {
 model Request {
  id        String   @id @default(cuid())
  type      String // 'hire' or 'apply'
- status    String   @default("pending") // 'pending', 'accepted', 'rejected'
+ status    String   @default("pending") // 'pending', 'approved', 'rejected'
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
  sender     User   @relation("RequestSender", fields: [senderId], references: [id])

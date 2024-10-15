@@ -7,6 +7,7 @@ import {
   hireEditor,
   applyAsEditor,
   getEditorRequests,
+  handleRequests,
 } from "@/data-access/editor";
 import { AuthenticationError } from "@/lib/utils";
 import { Session } from "next-auth";
@@ -49,7 +50,7 @@ export async function hireEditorUseCase(session: Session | null, id: string) {
 
 export async function applyAsEditorUseCase(
   session: Session | null,
-  id: string
+  id: string,
 ) {
   if (!session) {
     throw new AuthenticationError();
@@ -63,4 +64,11 @@ export async function requestsUseCase(session: Session) {
   }
   const res = await getEditorRequests(session.user.id);
   return res;
+}
+
+export async function handleRequestsUseCase(session: any, type: string, requestId: string) {
+  if (!session) {
+    throw new AuthenticationError();
+  }
+  await handleRequests({type, userId: session.id, requestId});
 }

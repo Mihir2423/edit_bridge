@@ -246,7 +246,7 @@ export async function getEditorRequests(userId: string) {
 
   // Determine which requests to use based on userType
   const requests = [...editor.request_received, ...editor.request_send];
-  
+
   // Use a type guard to determine the shape of each request
   const flattenedRequests = requests.map((request) => {
     if ("sender" in request) {
@@ -255,7 +255,7 @@ export async function getEditorRequests(userId: string) {
         createdAt: request.createdAt,
         status: request.status,
         user: request.sender,
-        type: "received"
+        type: "received",
       };
     } else {
       return {
@@ -263,10 +263,71 @@ export async function getEditorRequests(userId: string) {
         createdAt: request.createdAt,
         status: request.status,
         user: request.receiver,
-        type: "sent"
+        type: "sent",
       };
     }
   });
 
   return flattenedRequests;
+}
+
+export async function handleRequests({
+  type,
+  userId,
+  requestId,
+}: {
+  type: string;
+  userId: string;
+  requestId: string;
+}) {
+  // get the request
+  const request = await prisma.request.findUnique({
+    where: {
+      id: requestId,
+    },
+    include: {
+      sender: true,
+      receiver: true,
+    },
+  });
+  if (!request) {
+    throw new Error("Request not found");
+  }
+  // check if the user is not the sender
+  if (type === "cancel") {
+    if (request.receiver.id === userId) {
+      throw new Error("You cannot handle this request");
+    }
+  } else {
+    if (request.sender.id === userId) {
+      throw new Error("You cannot handle this request");
+    }
+  }
+  // approve or reject the request
+  if (type === "approve") {
+    await prisma.request.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: "approved",
+      },
+    });
+  } else if (type === "reject") {
+    // delete request
+    await prisma.request.delete({
+      where: {
+        id: requestId,
+      },
+    });
+  } else if (type === "cancel") {
+    // delete request
+    await prisma.request.delete({
+      where: {
+        id: requestId,
+      },
+    });
+  } else {
+    throw new Error("Invalid request type");
+  }
 }
