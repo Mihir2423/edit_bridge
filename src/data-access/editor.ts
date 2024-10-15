@@ -2,6 +2,7 @@ import "server-only";
 
 import prisma from "@/lib/db";
 import { Session } from "next-auth";
+import { createTransaction } from "./utils";
 
 export async function getAllEditors() {
   const editors = await prisma.user.findMany({
@@ -24,7 +25,7 @@ export async function getAllEditors() {
   return editors;
 }
 export async function getAllCreators() {
-  const editors = await prisma.user.findMany({
+  const creators = await prisma.user.findMany({
     where: {
       userType: "creator",
     },
@@ -41,7 +42,78 @@ export async function getAllCreators() {
       },
     },
   });
-  return editors;
+  return creators;
+}
+
+export async function getMyCreators(userId: string) {
+  const myCreators = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      editors: {
+        select: {
+          creator: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              slug: true,
+              bio: true,
+              image: true,
+              request_received: {
+                select: {
+                  senderId: true,
+                },
+              },
+              request_send: {
+                select: {
+                  receiverId: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  
+  return myCreators?.editors ?? [];
+}
+export async function getMyEditors(userId: string) {
+  const myEditors = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      creators: {
+        select: {
+          editor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              slug: true,
+              bio: true,
+              image: true,
+              request_received: {
+                select: {
+                  senderId: true,
+                },
+              },
+              request_send: {
+                select: {
+                  receiverId: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  
+  return myEditors?.creators ?? [];
 }
 
 async function getUserById(id: string) {
@@ -305,14 +377,51 @@ export async function handleRequests({
   }
   // approve or reject the request
   if (type === "approve") {
-    await prisma.request.update({
-      where: {
-        id: requestId,
-      },
-      data: {
-        status: "approved",
-      },
-    });
+    // if userType is creator, connect the creator to the editor
+    if (request.sender.userType === "creator") {
+      await createTransaction(async (prisma) => {
+        await prisma.request.update({
+          where: {
+            id: requestId,
+          },
+          data: {
+            status: "approved",
+          },
+        });
+        await prisma.team.create({
+          data: {
+            creator: {
+              connect: { id: request.sender.id },
+            },
+            editor: {
+              connect: { id: request.receiver.id },
+            },
+          },
+        });
+      });
+    } else {
+      // if userType is editor, connect the editor to the creator
+      await createTransaction(async (prisma) => {
+        await prisma.request.update({
+          where: {
+            id: requestId,
+          },
+          data: {
+            status: "approved",
+          },
+        });
+        await prisma.team.create({
+          data: {
+            creator: {
+              connect: { id: request.receiver.id },
+            },
+            editor: {
+              connect: { id: request.sender.id },
+            },
+          },
+        });
+      });
+    }
   } else if (type === "reject") {
     // delete request
     await prisma.request.delete({

@@ -12,7 +12,7 @@ model User {
  name             String?
  email            String            @unique
  emailVerified    DateTime?
- slug             String?            @unique
+ slug             String?           @unique
  image            String?
  password         String?
  role             String?
@@ -31,19 +31,33 @@ model User {
  verifyEmailToken VerifyEmailToken?
  request_send     Request[]         @relation("RequestSender")
  request_received Request[]         @relation("RequestReceiver")
+ creators         Team[]            @relation("UserCreators")
+ editors          Team[]            @relation("UserEditors")
 
  @@map("users")
 }
 
-model Request {
+model Team {
  id        String   @id @default(cuid())
- type      String // 'hire' or 'apply'
- status    String   @default("pending") // 'pending', 'approved', 'rejected'
+ creator   User     @relation("UserCreators", fields: [creatorId], references: [id])
+ creatorId String
+ editor    User     @relation("UserEditors", fields: [editorId], references: [id])
+ editorId  String
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
- sender     User   @relation("RequestSender", fields: [senderId], references: [id])
+
+ @@map("team")
+}
+
+model Request {
+ id         String   @id @default(cuid())
+ type       String // 'hire' or 'apply'
+ status     String   @default("pending") // 'pending', 'accepted', 'rejected'
+ createdAt  DateTime @default(now())
+ updatedAt  DateTime @updatedAt
+ sender     User     @relation("RequestSender", fields: [senderId], references: [id])
  senderId   String
- receiver   User   @relation("RequestReceiver", fields: [receiverId], references: [id])
+ receiver   User     @relation("RequestReceiver", fields: [receiverId], references: [id])
  receiverId String
 
  @@map("requests")
