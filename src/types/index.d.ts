@@ -66,6 +66,6 @@ declare type Requests = {
   id: string;
   createdAt: Date;
   status: string;
-  user: { name: string | null; email: string; id: string };
+  user: { slug: string | null; name: string | null; email: string; id: string };
   type: string;
 };

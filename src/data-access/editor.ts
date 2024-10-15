@@ -212,6 +212,7 @@ async function getEditorRequestsByUserId(id: string) {
             select: {
               name: true,
               email: true,
+              slug: true,
               id: true,
             },
           },
@@ -227,6 +228,7 @@ async function getEditorRequestsByUserId(id: string) {
               name: true,
               email: true,
               id: true,
+              slug: true,
             },
           },
         },
