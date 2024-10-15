@@ -212,6 +212,7 @@ async function getEditorRequestsByUserId(id: string) {
             select: {
               name: true,
               email: true,
+              id: true,
             },
           },
         },
@@ -225,6 +226,7 @@ async function getEditorRequestsByUserId(id: string) {
             select: {
               name: true,
               email: true,
+              id: true,
             },
           },
         },
@@ -241,11 +243,8 @@ export async function getEditorRequests(userId: string) {
   }
 
   // Determine which requests to use based on userType
-  const requests =
-    editor.userType === "creator"
-      ? editor.request_received
-      : editor.request_send;
-
+  const requests = [...editor.request_received, ...editor.request_send];
+  
   // Use a type guard to determine the shape of each request
   const flattenedRequests = requests.map((request) => {
     if ("sender" in request) {
@@ -253,14 +252,16 @@ export async function getEditorRequests(userId: string) {
         id: request.id,
         createdAt: request.createdAt,
         status: request.status,
-        sender: request.sender,
+        user: request.sender,
+        type: "received"
       };
     } else {
       return {
         id: request.id,
         createdAt: request.createdAt,
         status: request.status,
-        sender: request.receiver,
+        user: request.receiver,
+        type: "sent"
       };
     }
   });

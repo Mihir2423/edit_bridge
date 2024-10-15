@@ -64,6 +64,7 @@
     @apply border-border;
   }
   body {
+   overscroll-behavior: none;
     @apply bg-background text-foreground;
   }
 }
