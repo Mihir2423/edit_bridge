@@ -2,6 +2,7 @@ import "server-only";
 
 import prisma from "@/lib/db";
 import { Session } from "next-auth";
+import { createTransaction } from "./utils";
 
 export async function getAllEditors() {
   const editors = await prisma.user.findMany({
@@ -305,14 +306,51 @@ export async function handleRequests({
   }
   // approve or reject the request
   if (type === "approve") {
-    await prisma.request.update({
-      where: {
-        id: requestId,
-      },
-      data: {
-        status: "approved",
-      },
-    });
+    // if userType is editor, connect the creator to the editor
+    if (request.sender.userType === "editor") {
+      await createTransaction(async (prisma) => {
+        await prisma.request.update({
+          where: {
+            id: requestId,
+          },
+          data: {
+            status: "approved",
+          },
+        });
+        await prisma.team.create({
+          data: {
+            creator: {
+              connect: { id: request.sender.id },
+            },
+            editor: {
+              connect: { id: request.receiver.id },
+            },
+          },
+        });
+      });
+    } else {
+      // if userType is creator, connect the editor to the creator
+      await createTransaction(async (prisma) => {
+        await prisma.request.update({
+          where: {
+            id: requestId,
+          },
+          data: {
+            status: "approved",
+          },
+        });
+        await prisma.team.create({
+          data: {
+            creator: {
+              connect: { id: request.receiver.id },
+            },
+            editor: {
+              connect: { id: request.sender.id },
+            },
+          },
+        });
+      });
+    }
   } else if (type === "reject") {
     // delete request
     await prisma.request.delete({
