@@ -33,6 +33,7 @@ model User {
  request_received Request[]         @relation("RequestReceiver")
  creators         Team[]            @relation("UserCreators")
  editors          Team[]            @relation("UserEditors")
+ Video            Video[]
 
  @@map("users")
 }
@@ -142,4 +143,16 @@ model VerifyEmailToken {
  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
  @@map("verify_email_tokens")
+}
+
+model Video {
+ id          String   @id @default(cuid())
+ title       String
+ description String
+ thumbnail   String
+ video       String
+ userId      String
+ user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ createdAt   DateTime @default(now())
+ updatedAt   DateTime @updatedAt
 }
