@@ -1,5 +1,7 @@
 import { loginWithMagicLinkUseCase } from "@/use-cases/magic-link";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request): Promise<Response> {
   try {
     const url = new URL(req.url);

@@ -15,8 +15,8 @@ declare interface ProfileData {
   instagramUrl: string;
   twitterUrl: string;
   email: string;
-  request_received: { senderId: string }[];
-  request_send: { receiverId: string }[];
+  request_received?: { senderId: string }[];
+  request_send?: { receiverId: string }[];
   previousWork?: WorkWithoutIds[];
 }
 
@@ -30,8 +30,8 @@ declare interface User {
   bio?: string;
   slug?: string | null;
   socials?: string[];
-  request_received: { senderId: string }[];
-  request_send: { receiverId: string }[];
+  request_received?: { senderId: string }[];
+  request_send?: { receiverId: string }[];
   previousWork?: Work[];
 }
 
@@ -68,4 +68,10 @@ declare type Requests = {
   status: string;
   user: { slug: string | null; name: string | null; email: string; id: string };
   type: string;
+};
+
+declare type ModalProps = {
+  title: string;
+  content: React.ReactNode;
+  children: React.ReactNode;
 };
