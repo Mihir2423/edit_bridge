@@ -10,15 +10,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      authorization: {
-        params: {
-          scope:
-            "openid email profile https://www.googleapis.com/auth/youtube.force-ssl",
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      // authorization: {
+      //   params: {
+      //     scope:
+      //       "openid email profile https://www.googleapis.com/auth/youtube.force-ssl",
+      //     prompt: "consent",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -45,14 +45,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return { ...token, ...session.user };
       }
       if (user) {
-        return { ...token, ...user };
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { id: true, userType: true, name: true, email: true },
+        });
+        return { ...token, ...dbUser };
       }
       return token;
     },
     async session({ session, token }) {
-      session.user = token as any;
-      return session;
-    },
+     session.user = {
+       id: token.id as string,
+       name: token.name,
+       email: token.email as string,
+       userType: token.userType,
+       emailVerified: token.emailVerified as Date,
+     };
+     return session;
+   },
   },
   session: {
     strategy: "jwt",
