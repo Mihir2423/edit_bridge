@@ -21,7 +21,6 @@ export default async function VideoDetailPage({
   const session = await assertAuthenticated();
   if (!session) redirect("/sign-in");
   const videoDetail = await getVideoDetailUseCase(params.slug);
-  console.log(videoDetail);
   return (
     <>
       <BreadCrumb
@@ -40,20 +39,27 @@ export default async function VideoDetailPage({
           />
           <div>
             <h2 className="mb-2 font-semibold text-xl">{videoDetail?.title}</h2>
-            <p className="text-muted-foreground">
-              {videoDetail?.description}
-            </p>
+            <p className="text-muted-foreground">{videoDetail?.description}</p>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end space-x-4">
-          <Button variant="outline" className="w-28">
-            <XCircle className="mr-2 w-4 h-4" />
-            Reject
-          </Button>
-          <Button className="w-28">
-            <CheckCircle className="mr-2 w-4 h-4" />
-            Accept
-          </Button>
+          {session.userType === "creator" ? (
+            <>
+              <Button variant="outline" className="w-28">
+                <XCircle className="mr-2 w-4 h-4" />
+                Reject
+              </Button>
+              <Button className="w-28">
+                <CheckCircle className="mr-2 w-4 h-4" />
+                Accept
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" className="w-28">
+              <XCircle className="mr-2 w-4 h-4" />
+              Delete
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </>

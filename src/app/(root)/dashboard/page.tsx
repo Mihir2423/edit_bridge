@@ -15,7 +15,6 @@ const DashboardPage = async () => {
     userType: currUser?.userType,
     userId: currUser?.id,
   });
-  console.log(myVideos, "My Videos");
 
   return (
     <div className="relative text-black">

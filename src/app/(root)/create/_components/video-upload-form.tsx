@@ -109,6 +109,7 @@ async function uploadFiles(files: File[]) {
   );
 
   await Promise.all(uploadPromises);
+  
   return uploadResponses.map((res) => res.fileUrl);
 }
 
