@@ -149,6 +149,7 @@ model VerifyEmailToken {
 model Video {
  id             String   @id @default(cuid())
  title          String
+ slug           String   @unique
  description    String
  thumbnail      String
  video          String
@@ -158,4 +159,5 @@ model Video {
  createdForUser User     @relation("VideoCreatedFor", fields: [createdForId], references: [id])
  createdAt      DateTime @default(now())
  updatedAt      DateTime @updatedAt
+ videoStatus    String   @default("pending") // 'pending', 'approved', 'rejected'
 }

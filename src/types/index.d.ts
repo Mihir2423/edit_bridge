@@ -69,3 +69,11 @@ declare type Requests = {
   user: { slug: string | null; name: string | null; email: string; id: string };
   type: string;
 };
+
+declare type Video = {
+  title: string;
+  video: string;
+  description: string;
+  thumbnail: string;
+  createdForId: string;
+};

@@ -9,8 +9,19 @@ import {
 import { CheckCircle, XCircle } from "lucide-react";
 import { VideoPlayer } from "./_components/video-player";
 import { BreadCrumb } from "@/components/globals/breadcrumb";
+import { assertAuthenticated } from "@/lib/session";
+import { redirect } from "next/navigation";
+import { getVideoDetailUseCase } from "@/use-cases/video";
 
-export default function VideoDetailPage() {
+export default async function VideoDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const session = await assertAuthenticated();
+  if (!session) redirect("/sign-in");
+  const videoDetail = await getVideoDetailUseCase(params.slug);
+  console.log(videoDetail);
   return (
     <>
       <BreadCrumb
@@ -24,16 +35,13 @@ export default function VideoDetailPage() {
         <CardContent className="space-y-4">
           <VideoPlayer
             title="Awesome Video Title"
-            src="/demos/thumbnail.mp4"
-            thumbnail="/demos/thumbnail.jpg"
+            src={videoDetail!.video}
+            thumbnail={videoDetail!.thumbnail}
           />
           <div>
-            <h2 className="mb-2 font-semibold text-xl">Awesome Video Title</h2>
+            <h2 className="mb-2 font-semibold text-xl">{videoDetail?.title}</h2>
             <p className="text-muted-foreground">
-              This is a brief description of the video. It provides context
-              about the content and helps viewers decide if they want to watch
-              it. The description can be a few sentences long to give a good
-              overview.
+              {videoDetail?.description}
             </p>
           </div>
         </CardContent>

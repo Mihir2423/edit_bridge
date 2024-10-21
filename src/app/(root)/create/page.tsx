@@ -3,6 +3,7 @@ import { VideoUploadForm } from "./_components/video-upload-form";
 import { getMyCreatorsUseCase, getMyEditorsUseCase } from "@/use-cases/editor";
 import { assertAuthenticated } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { BreadCrumb } from "@/components/globals/breadcrumb";
 
 type Props = {};
 
@@ -21,7 +22,15 @@ const CreatePage = async (props: Props) => {
         image: creator.image,
       };
     }) || [];
-  return <VideoUploadForm creators={creators} />;
+  return (
+    <>
+      <BreadCrumb
+        links={[{ name: "Home", path: "/dashboard" }]}
+        page="Create Video"
+      />
+      <VideoUploadForm creators={creators} />;
+    </>
+  );
 };
 
 export default CreatePage;
