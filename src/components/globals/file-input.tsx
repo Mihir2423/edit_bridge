@@ -29,7 +29,7 @@ export const FileInput = <T extends FieldValues>({
     setPreview("");
     setFileName("");
     setFileSize("");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     form.setValue(name, undefined as any);
     if (form.formState.errors[name as Path<T>]) {
       form.clearErrors(name as Path<T>);
@@ -41,7 +41,6 @@ export const FileInput = <T extends FieldValues>({
       <FormField
         control={form.control}
         name={name}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         render={({ field: { onChange, value, ...rest } }) => (
           <>
             <FormItem>
