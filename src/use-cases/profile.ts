@@ -3,7 +3,7 @@ import { AuthenticationError, UnauthorizedError } from "./errors";
 import { isProfileUser } from "./authorization";
 import { updateProfile } from "@/data-access/profile";
 
-export async function updateProfileUseCase(authenticatedUser: Session | null, data: UserWithoutWorkIds) {
+export async function updateProfileUseCase(authenticatedUser: Session | null, data: any) {
   if (!authenticatedUser) {
     throw new AuthenticationError();
   }

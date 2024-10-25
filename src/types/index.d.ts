@@ -70,6 +70,14 @@ declare type Requests = {
   type: string;
 };
 
+declare type Video = {
+  title: string;
+  video: string;
+  description: string;
+  thumbnail: string;
+  createdForId: string;
+}
+
 declare type ModalProps = {
   title: string;
   content: React.ReactNode;

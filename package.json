@@ -22,6 +22,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
     "@react-email/components": "^0.0.22",
+    "@uploadthing/react": "^7.0.3",
     "@vidstack/react": "^1.11.30",
     "axios": "^1.7.4",
     "class-variance-authority": "^0.7.0",
@@ -41,6 +42,7 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^7.1.0",
     "zod": "^3.23.8",
     "zsa": "^0.6.0",
     "zsa-react": "^0.2.2"

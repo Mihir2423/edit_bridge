@@ -52,3 +52,28 @@ export async function generateUniqueSlug(name: string | null): Promise<string> {
     counter++;
   }
 }
+
+export async function generateVideoSlug(name: string | null): Promise<string> {
+ let baseSlug: string;
+ if (!name || name.trim() === '') {
+   baseSlug = 'title';
+ } else {
+   baseSlug = slugify(name, { lower: true, strict: true });
+ }
+
+ let uniqueSlug = baseSlug;
+  let counter = 1;
+
+  while (true) {
+    const existingTitle = await prisma.video.findUnique({
+      where: { slug: uniqueSlug },
+    });
+
+    if (!existingTitle) {
+      return uniqueSlug;
+    }
+
+    uniqueSlug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+}

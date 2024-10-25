@@ -7,9 +7,6 @@ export default auth((req) => {
 
   const isAuthenticated = !!req.auth;
   const userType = req.auth?.user?.userType;
-  console.log(userType, "userType Middleware");
-
-  console.log("isAuthenticated", isAuthenticated);
 
   const isAuthRoute = publicRoutes.includes(nextUrl.pathname);
   if (nextUrl.pathname.startsWith("/api")) {
