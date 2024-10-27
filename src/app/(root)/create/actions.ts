@@ -4,6 +4,7 @@ import { authenticatedAction } from "@/lib/safe-action";
 import { assertAuthenticated } from "@/lib/session";
 import { createVideoUseCase } from "@/use-cases/video";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 // Server action
@@ -23,4 +24,5 @@ export const createVideoAction = authenticatedAction
     await createVideoUseCase({ input, userId: session.id });
     console.log("Handling request", input);
     revalidatePath("/dashboard");
+    redirect("/dashboard");
   });

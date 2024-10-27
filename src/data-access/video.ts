@@ -77,7 +77,6 @@ export const getMyVideos = async ({
   return userType === "editor" ? video?.createdVideos : video?.videosCreatedFor;
 };
 
-
 export const getVideoDetail = async (slug: string) => {
   return prisma.video.findUnique({
     where: {
@@ -88,8 +87,10 @@ export const getVideoDetail = async (slug: string) => {
       title: true,
       video: true,
       slug: true,
+      createdAt: true,
       description: true,
       thumbnail: true,
+      videoStatus: true,
       user: {
         select: {
           id: true,
@@ -108,4 +109,21 @@ export const getVideoDetail = async (slug: string) => {
       },
     },
   });
-}
+};
+
+export const updateVideoStatus = async ({
+  videoId,
+  status,
+}: {
+  videoId: string;
+  status: string;
+}) => {
+  await prisma.video.update({
+    where: {
+      id: videoId,
+    },
+    data: {
+      videoStatus: status,
+    },
+  });
+};
