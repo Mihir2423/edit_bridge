@@ -87,6 +87,7 @@ export const getVideoDetail = async (slug: string) => {
       title: true,
       video: true,
       slug: true,
+      createdAt: true,
       description: true,
       thumbnail: true,
       videoStatus: true,
