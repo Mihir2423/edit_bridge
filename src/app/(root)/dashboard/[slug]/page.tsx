@@ -12,6 +12,7 @@ import { BreadCrumb } from "@/components/globals/breadcrumb";
 import { assertAuthenticated } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { getVideoDetailUseCase } from "@/use-cases/video";
+import { StatusBtn } from "./_components/status-btn";
 
 export default async function VideoDetailPage({
   params,
@@ -21,6 +22,7 @@ export default async function VideoDetailPage({
   const session = await assertAuthenticated();
   if (!session) redirect("/sign-in");
   const videoDetail = await getVideoDetailUseCase(params.slug);
+  if (!videoDetail) redirect("/dashboard");
   return (
     <>
       <BreadCrumb
@@ -44,16 +46,37 @@ export default async function VideoDetailPage({
         </CardContent>
         <CardFooter className="flex justify-end space-x-4">
           {session.userType === "creator" ? (
-            <>
+            videoDetail?.videoStatus === "pending" ? (
+              <>
+                <StatusBtn
+                  variant="outline"
+                  status="rejected"
+                  videoId={videoDetail?.id}
+                  creatorId={videoDetail.user.id}
+                >
+                  <XCircle className="mr-2 w-4 h-4" />
+                  Reject
+                </StatusBtn>
+                <StatusBtn
+                  status="approved"
+                  videoId={videoDetail.id}
+                  creatorId={videoDetail.user.id}
+                >
+                  <CheckCircle className="mr-2 w-4 h-4" />
+                  Accept
+                </StatusBtn>
+              </>
+            ) : videoDetail?.videoStatus === "rejected" ? (
               <Button variant="outline" className="w-28">
                 <XCircle className="mr-2 w-4 h-4" />
-                Reject
+                Rejected
               </Button>
-              <Button className="w-28">
+            ) : (
+              <Button variant="outline" className="w-32">
                 <CheckCircle className="mr-2 w-4 h-4" />
-                Accept
+                Approved
               </Button>
-            </>
+            )
           ) : (
             <Button variant="outline" className="w-28">
               <XCircle className="mr-2 w-4 h-4" />

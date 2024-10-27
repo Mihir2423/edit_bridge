@@ -1,7 +1,7 @@
 import "server-only";
 
 import { AuthenticationError } from "./errors";
-import { createVideo, getMyVideos, getVideoDetail } from "@/data-access/video";
+import { createVideo, getMyVideos, getVideoDetail, updateVideoStatus } from "@/data-access/video";
 export const createVideoUseCase = async ({
   input,
   userId,
@@ -38,4 +38,29 @@ export const getMyVideosUseCase = async ({
 
 export const getVideoDetailUseCase = async (slug: string) => {
   return getVideoDetail(slug);
-}
+};
+
+export const updateVideoStatusUseCase = async ({
+  userType,
+  videoId,
+  userId,
+  creatorId,
+  status
+}: {
+  userType: string;
+  videoId: string;
+  userId: string;
+  creatorId: string;
+  status: string;
+}) => {
+  if (userId === creatorId) {
+    throw new Error("You can't update status for your own video");
+  }
+  if (!userId) {
+    throw new AuthenticationError();
+  }
+  if (userType !== "creator") {
+    throw new Error("You don't have permission to update status");
+  }
+  await updateVideoStatus({ videoId, status });
+};
