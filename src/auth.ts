@@ -9,8 +9,14 @@ const YouTubeProvider = GoogleProvider({
   clientSecret: process.env.AUTH_GOOGLE_SECRET,
   authorization: {
     params: {
-      scope:
-        "openid email profile https://www.googleapis.com/auth/youtube.force-ssl",
+      scope: [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/youtube.upload",
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.force-ssl",
+      ].join(" "),
       prompt: "consent",
       access_type: "offline",
       response_type: "code",
@@ -56,6 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.youtube_access_token = account.access_token;
         token.youtube_refresh_token = account.refresh_token;
 
+        console.log(account.access_token, "TOKEN");
         // Store YouTube credentials in the database
         await prisma.account.update({
           where: {

@@ -57,7 +57,7 @@ export default async function VideoDetailPage({
         page="Video Detail"
       />
       <div className="gap-8 grid grid-cols-1 lg:grid-cols-3 mt-8">
-        <Card className="col-span-2 mx-auto">
+        <Card className="col-span-2 mx-auto w-full">
           <CardHeader>
             <CardTitle className="font-bold text-2xl">Video Review</CardTitle>
           </CardHeader>
@@ -132,6 +132,10 @@ export default async function VideoDetailPage({
                   platform={platform}
                   videoStatus={videoDetail?.videoStatus}
                   slug={params.slug}
+                  videoUrl={videoDetail?.video}
+                  title={videoDetail?.title}
+                  description={videoDetail?.description}
+                  thumbnailUrl={videoDetail?.thumbnail}
                 />
               ))}
             </CardContent>

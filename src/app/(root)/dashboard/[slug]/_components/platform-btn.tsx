@@ -6,6 +6,8 @@ import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { toast } from "sonner";
 import { useSession, signIn as nextAuthSignIn } from "next-auth/react";
 import { useState } from "react";
+import axios from "axios";
+import CryptoJS from "crypto-js";
 
 type Platform = {
   name: string;
@@ -17,11 +19,57 @@ type Props = {
   platform: Platform;
   videoStatus: string;
   slug: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  thumbnailUrl: string;
 };
 
-export const PlatformBtn = ({ platform, videoStatus, slug }: Props) => {
+export const PlatformBtn = ({
+  platform,
+  videoStatus,
+  slug,
+  title,
+  description,
+  videoUrl,
+  thumbnailUrl,
+}: Props) => {
   const { data: session, update: updateSession } = useSession();
   const [isConnecting, setIsConnecting] = useState(false);
+  const isYouTubeConnected = !!session?.user?.youtube_access_token;
+  const handleUpload = async () => {
+    // Upload to YouTube
+    setIsConnecting(true);
+    try {
+      const secret = process.env.NEXT_PUBLIC_YOUTUBE_SECRET;
+      if (!secret || !session?.user?.youtube_access_token) {
+        throw new Error("Something went wrong");
+      }
+      const response = await axios.get(
+        `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${session?.user?.youtube_access_token}`
+      );
+      console.log(response.data, "SESSIONDATA");
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/upload-video`,
+        {
+          accessToken: session?.user?.youtube_access_token,
+          title,
+          description,
+          videoUrl,
+          thumbnailUrl,
+        }
+      );
+      if (res.data.error) {
+        throw new Error(res.data.error);
+      }
+      toast.success("Video uploaded to YouTube");
+    } catch (error) {
+      console.error("Error uploading to YouTube:", error);
+      toast.error("Error uploading to YouTube");
+    } finally {
+      setIsConnecting(false);
+    }
+  };
 
   const handleConnectYouTube = async () => {
     setIsConnecting(true);
@@ -46,15 +94,16 @@ export const PlatformBtn = ({ platform, videoStatus, slug }: Props) => {
       setIsConnecting(false);
     }
   };
-  const isYouTubeConnected = !!session?.user?.youtube_access_token;
 
   const handleClick = (platformName: string) => {
     if (platformName.toLowerCase() === "youtube") {
       // Check if YouTube is already connected
       if (isYouTubeConnected) {
-        toast("YouTube already connected");
         // Upload to youtube
+        toast("Uploading to youtube...");
+        handleUpload();
       } else {
+        // Connect to YouTube
         handleConnectYouTube();
       }
     }
