@@ -9,18 +9,11 @@ import {
 } from "@/components/ui/card";
 import { assertAuthenticated } from "@/lib/session";
 import { getVideoDetailUseCase } from "@/use-cases/video";
-import {
-  CheckCircle,
-  Instagram,
-  Music,
-  Share2,
-  XCircle,
-  Youtube,
-} from "lucide-react";
+import { CheckCircle, Share2, XCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 import { StatusBtn } from "./_components/status-btn";
 import { VideoPlayer } from "./_components/video-player";
-import { TwitterLogoIcon } from "@radix-ui/react-icons";
+import { PlatformBtn } from "./_components/platform-btn";
 
 export default async function VideoDetailPage({
   params,
@@ -37,22 +30,22 @@ export default async function VideoDetailPage({
   const socialPlatforms = [
     {
       name: "YouTube",
-      icon: Youtube,
+      iconType: "youtube",
       connected: connectedPlatforms.includes("youtube"),
     },
     {
       name: "Instagram",
-      icon: Instagram,
+      iconType: "instagram",
       connected: connectedPlatforms.includes("instagram"),
     },
     {
       name: "X(Twitter)",
-      icon: TwitterLogoIcon,
+      iconType: "twitter",
       connected: connectedPlatforms.includes("twitter"),
     },
     {
       name: "TikTok",
-      icon: Music,
+      iconType: "tiktok",
       connected: connectedPlatforms.includes("tiktok"),
     },
   ];
@@ -64,7 +57,7 @@ export default async function VideoDetailPage({
         page="Video Detail"
       />
       <div className="gap-8 grid grid-cols-1 lg:grid-cols-3 mt-8">
-        <Card className="col-span-2 mx-auto">
+        <Card className="col-span-2 mx-auto w-full">
           <CardHeader>
             <CardTitle className="font-bold text-2xl">Video Review</CardTitle>
           </CardHeader>
@@ -134,23 +127,16 @@ export default async function VideoDetailPage({
             </CardHeader>
             <CardContent className="gap-4 grid">
               {socialPlatforms.map((platform) => (
-                <Button
+                <PlatformBtn
                   key={platform.name}
-                  variant={
-                    platform.connected && videoDetail.videoStatus === "approved"
-                      ? "default"
-                      : "outline"
-                  }
-                  className="justify-start w-full"
-                  disabled={videoDetail.videoStatus !== "approved"}
-                >
-                  <platform.icon className="mr-2 w-5 h-5" />
-                  {platform.connected
-                    ? videoDetail.videoStatus === "approved"
-                      ? `Share on ${platform.name}`
-                      : "Pending Approval"
-                    : `Connect ${platform.name}`}
-                </Button>
+                  platform={platform}
+                  videoStatus={videoDetail?.videoStatus}
+                  slug={params.slug}
+                  videoUrl={videoDetail?.video}
+                  title={videoDetail?.title}
+                  description={videoDetail?.description}
+                  thumbnailUrl={videoDetail?.thumbnail}
+                />
               ))}
             </CardContent>
             <CardFooter>

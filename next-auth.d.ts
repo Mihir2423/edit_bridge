@@ -9,6 +9,7 @@ declare module "next-auth" {
       city?: string
       country?: string
       image?: string
+      youtube_access_token?: string;
     } & DefaultSession["user"]
   }
 
