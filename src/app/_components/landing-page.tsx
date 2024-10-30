@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ChevronRight, Edit3, Zap, CreditCard, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function LandingPage() {
   const [userType, setUserType] = useState("creator");
@@ -171,21 +172,37 @@ function HowItWorksStep({
   videoSrc,
   reverse = false,
 }: any) {
+  const [isHovering, setIsHovering] = useState(false);
+  const placeholderImage = `/placeholder/vid${step}.png`;
   return (
     <div
       className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center gap-8`}
     >
-      <div className="shadow-black shadow-md border rounded-md w-full md:w-1/2">
-        <video
-          className="shadow-lg rounded-lg w-full h-auto object-cover"
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          poster="/placeholder.svg"
-        >
-          Your browser does not support the video tag.
-        </video>
+      <div
+        className="relative shadow-black shadow-md border rounded-md w-full md:w-1/2 overflow-hidden"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        {isHovering ? (
+          <video
+            className="shadow-lg rounded-lg w-full h-[305] object-cover"
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <Image
+            width={500}
+            height={300}
+            src={placeholderImage}
+            alt={`Step ${step} preview`}
+            className="shadow-lg rounded-lg w-full h-[305px] object-cover"
+          />
+        )}
       </div>
       <div className="w-full md:w-1/2 text-left">
         <div className="inline-block bg-primary mb-2 px-3 py-1 rounded-full font-semibold text-primary-foreground text-sm">
