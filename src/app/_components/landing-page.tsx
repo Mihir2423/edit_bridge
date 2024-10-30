@@ -67,26 +67,26 @@ export default function LandingPage() {
               step={1}
               title="Create Your Profile"
               description="Set up your account as a creator or editor. Showcase your skills, experience, and portfolio to attract the right collaborators."
-              videoSrc="/placeholder.svg?height=300&width=500"
+              videoSrc="/videos/vid1.mp4"
             />
             <HowItWorksStep
               step={2}
               title="Connect and Collaborate"
               description="Creators can browse and hire editors, while editors can apply for projects. Use our intuitive platform to communicate and share files seamlessly."
-              videoSrc="/placeholder.svg?height=300&width=500"
+              videoSrc="/videos/vid2.mp4"
               reverse
             />
             <HowItWorksStep
               step={3}
               title="Review and Approve"
               description="Creators can easily review edited content, provide feedback, and approve final versions. Our streamlined process ensures quick turnaround times."
-              videoSrc="/placeholder.svg?height=300&width=500"
+              videoSrc="/videos/vid3.mp4"
             />
             <HowItWorksStep
               step={4}
               title="Publish and Grow"
               description="Once approved, publish your content directly to various platforms. Track performance and build long-term relationships with your favorite collaborators."
-              videoSrc="/placeholder.svg?height=300&width=500"
+              videoSrc="/videos/vid4.mp4"
               reverse
             />
           </div>
@@ -175,14 +175,14 @@ function HowItWorksStep({
     <div
       className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center gap-8`}
     >
-      <div className="w-full md:w-1/2">
+      <div className="shadow-black shadow-md border rounded-md w-full md:w-1/2">
         <video
-          className="shadow-lg rounded-lg w-full h-auto"
+          className="shadow-lg rounded-lg w-full h-auto object-cover"
           src={videoSrc}
           autoPlay
           loop
           muted
-          poster="/placeholder.svg?height=300&width=500"
+          poster="/placeholder.svg"
         >
           Your browser does not support the video tag.
         </video>

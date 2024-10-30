@@ -9,6 +9,8 @@ import { isInRequestList } from "@/lib/utils";
 
 export const CreatorCard = async ({ data }: { data: Profile }) => {
   const currUser = await assertAuthenticated();
+  console.log(data);
+  
   return (
     <Card className="relative flex flex-col gap-4 shadow-md p-4 rounded-md group">
       <div className="flex flex-col items-center gap-2">

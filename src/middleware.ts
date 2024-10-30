@@ -15,6 +15,10 @@ export default auth((req) => {
 
   const isRoleRoute = nextUrl.pathname === ROLE_ROUTE;
 
+  if (nextUrl.pathname === "/") {
+    return NextResponse.next();
+  }
+
   if (
     isAuthenticated &&
     (userType === null || userType === undefined) &&
