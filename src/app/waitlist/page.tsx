@@ -2,18 +2,36 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Edit3 } from "lucide-react";
+import { Edit3, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
+import { useServerAction } from "zsa-react";
+import { addToWaitListAction } from "./actions";
 
 export default function Component() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  const { execute, isPending } = useServerAction(addToWaitListAction, {
+    onError({ err }) {
+      console.log(err);
+      toast.message(err.message);
+    },
+    onSuccess() {
+      toast.success("Request sent successfully");
+      setSubmitted(true);
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the email to your backend
-    setSubmitted(true);
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+    execute({ email });
   };
 
   return (
@@ -59,7 +77,15 @@ export default function Component() {
                 required
                 className="h-12"
               />
-              <Button type="submit" size="lg" className="h-12">
+              <Button
+                type="submit"
+                disabled={isPending}
+                size="lg"
+                className="flex items-center h-12"
+              >
+                {isPending && (
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                )}
                 Join Waitlist
               </Button>
             </form>

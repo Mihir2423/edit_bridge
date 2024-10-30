@@ -9,15 +9,15 @@ export default auth((req) => {
   const userType = req.auth?.user?.userType;
 
   const isAuthRoute = publicRoutes.includes(nextUrl.pathname);
-  if (nextUrl.pathname.startsWith("/api")) {
+  if (nextUrl.pathname.startsWith("/api") || nextUrl.pathname === "/waitlist" || nextUrl.pathname === "/") {
     return NextResponse.next(); // Allow the request to proceed
+  } else {
+   return NextResponse.redirect(new URL("/waitlist", nextUrl));
   }
+
+  return;
 
   const isRoleRoute = nextUrl.pathname === ROLE_ROUTE;
-
-  if (nextUrl.pathname === "/") {
-    return NextResponse.next();
-  }
 
   if (
     isAuthenticated &&
