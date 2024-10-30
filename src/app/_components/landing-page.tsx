@@ -1,27 +1,35 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ChevronRight, Edit3, Zap, CreditCard, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
   const [userType, setUserType] = useState("creator");
+  const router = useRouter();
+  const handleGetStarted = () => {
+    router.push("/sign-in");
+  };
 
   return (
     <div className="flex flex-col bg-gray-50 min-h-screen">
+     <div className="top-0 left-0 absolute flex justify-center items-center w-full">
+
       <header className="flex justify-between items-center mx-auto px-4 py-6 w-full max-w-6xl">
         <div className="flex items-center space-x-2">
           <Edit3 className="w-6 h-6" />
           <span className="font-bold text-xl">Edit Bridge</span>
         </div>
-        <Button variant="outline">Log In</Button>
+        <Button variant="outline" onClick={handleGetStarted}>Log In</Button>
       </header>
+     </div>
 
       <main className="flex flex-col flex-grow justify-center items-center px-4 text-center">
-        <div className="space-y-8 mb-16 w-full max-w-3xl">
-          <div className="flex justify-center space-x-2">
+        <div className="flex flex-col justify-center items-center space-y-8 mb-16 w-full max-w-3xl min-h-screen">
+          <div className="flex justify-center items-center space-x-2">
             <Switch
               id="user-type"
               checked={userType === "editor"}
@@ -46,7 +54,7 @@ export default function LandingPage() {
             most - creating great content.
           </p>
 
-          <Button size="lg" className="text-lg">
+          <Button size="lg" onClick={handleGetStarted} className="text-lg">
             Get Started <ChevronRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
@@ -118,38 +126,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto px-4 py-16 w-full max-w-6xl">
-          <h2 className="mb-12 font-bold text-3xl text-center">
-            Pricing Plans
-          </h2>
-          <div className="gap-8 grid md:grid-cols-2">
-            <PricingCard
-              title="Basic Plan"
-              price="$19"
-              period="per month"
-              features={[
-                "Up to 5 active projects",
-                "Basic collaboration tools",
-                "Direct messaging",
-                "Standard support",
-              ]}
-            />
-            <PricingCard
-              title="Personal Plan"
-              price="$49"
-              period="per month"
-              features={[
-                "Unlimited active projects",
-                "Advanced collaboration tools",
-                "Priority support",
-                "Analytics dashboard",
-                "Custom branding",
-              ]}
-              recommended
-            />
-          </div>
-        </section>
-
         <section className="bg-primary mx-auto px-4 py-16 rounded-lg w-full max-w-6xl text-primary-foreground">
           <div className="space-y-4 text-center">
             <h2 className="font-bold text-3xl">
@@ -158,7 +134,12 @@ export default function LandingPage() {
             <p className="text-xl">
               Join Edit Bridge today and experience seamless collaboration.
             </p>
-            <Button size="lg" variant="secondary" className="mt-4">
+            <Button
+              size="lg"
+              onClick={handleGetStarted}
+              variant="secondary"
+              className="mt-4"
+            >
               Get Started Now <ChevronRight className="ml-2 w-5 h-5" />
             </Button>
           </div>
@@ -166,88 +147,6 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-gray-200 mx-auto px-4 py-8 border-t w-full max-w-6xl text-center text-gray-500">
-        <div className="gap-8 grid md:grid-cols-4 mb-8">
-          <div>
-            <h3 className="mb-2 font-semibold">Product</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  FAQ
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-2 font-semibold">Company</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-2 font-semibold">Resources</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Tutorials
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Support
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-2 font-semibold">Legal</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-700">
-                  Cookie Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
         <p>© {new Date().getFullYear()} Edit Bridge. All rights reserved.</p>
       </footer>
     </div>
@@ -301,36 +200,6 @@ function TestimonialCard({ quote, author }: any) {
     <div className="bg-white shadow-md p-6 rounded-lg">
       <p className="mb-4 text-lg">&quot;{quote}&quot;</p>
       <p className="font-semibold text-gray-700">- {author}</p>
-    </div>
-  );
-}
-
-function PricingCard({ title, price, period, features, recommended = false }: any) {
-  return (
-    <div
-      className={`bg-white p-6 rounded-lg shadow-md ${recommended ? "border-2 border-primary" : ""}`}
-    >
-      {recommended && (
-        <div className="mb-2 font-semibold text-primary text-sm">
-          Recommended
-        </div>
-      )}
-      <h3 className="mb-4 font-bold text-2xl">{title}</h3>
-      <div className="mb-4">
-        <span className="font-bold text-4xl">{price}</span>
-        <span className="text-gray-600">/{period}</span>
-      </div>
-      <ul className="space-y-2 mb-6">
-        {features.map((feature: any, index: any) => (
-          <li key={index} className="flex items-center">
-            <Check className="mr-2 w-5 h-5 text-primary" />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-      <Button className="w-full" variant={recommended ? "default" : "outline"}>
-        Choose Plan
-      </Button>
     </div>
   );
 }
