@@ -16,16 +16,17 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col bg-gray-50 min-h-screen">
-     <div className="top-0 left-0 absolute flex justify-center items-center w-full">
-
-      <header className="flex justify-between items-center mx-auto px-4 py-6 w-full max-w-6xl">
-        <div className="flex items-center space-x-2">
-          <Edit3 className="w-6 h-6" />
-          <span className="font-bold text-xl">Edit Bridge</span>
-        </div>
-        <Button variant="outline" onClick={handleGetStarted}>Log In</Button>
-      </header>
-     </div>
+      <div className="top-0 left-0 absolute flex justify-center items-center w-full">
+        <header className="flex justify-between items-center mx-auto px-4 py-6 w-full max-w-6xl">
+          <div className="flex items-center space-x-2">
+            <Edit3 className="w-6 h-6" />
+            <span className="font-bold text-xl">Edit Bridge</span>
+          </div>
+          <Button variant="outline" onClick={handleGetStarted}>
+            Log In
+          </Button>
+        </header>
+      </div>
 
       <main className="flex flex-col flex-grow justify-center items-center px-4 text-center">
         <div className="flex flex-col justify-center items-center space-y-8 mb-16 w-full max-w-3xl min-h-screen">
@@ -178,7 +179,9 @@ function HowItWorksStep({
         <video
           className="shadow-lg rounded-lg w-full h-auto"
           src={videoSrc}
-          controls
+          autoPlay
+          loop
+          muted
           poster="/placeholder.svg?height=300&width=500"
         >
           Your browser does not support the video tag.

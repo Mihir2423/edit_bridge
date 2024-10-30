@@ -106,6 +106,8 @@ export const PlatformBtn = ({
         // Connect to YouTube
         handleConnectYouTube();
       }
+    } else {
+      toast.error("Coming Soon!!");
     }
   };
 
