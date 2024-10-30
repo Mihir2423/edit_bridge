@@ -23,14 +23,11 @@ export default function LandingPage() {
             <Edit3 className="w-6 h-6" />
             <span className="font-bold text-xl">Edit Bridge</span>
           </div>
-          <Button variant="outline" onClick={handleGetStarted}>
-            Log In
-          </Button>
         </header>
       </div>
 
-      <main className="flex flex-col flex-grow justify-center items-center px-4 text-center">
-        <div className="flex flex-col justify-center items-center space-y-8 mb-16 w-full max-w-3xl min-h-screen">
+      <main className="flex flex-col flex-grow justify-center items-center text-center">
+        <div className="flex flex-col justify-center items-center space-y-8 bg-[url('/bg/hero.png')] bg-cover bg-no-repeat bg-center w-full max-w-6xl min-h-screen">
           <div className="flex justify-center items-center space-x-2">
             <Switch
               id="user-type"
@@ -39,7 +36,7 @@ export default function LandingPage() {
                 setUserType(userType === "creator" ? "editor" : "creator")
               }
             />
-            <Label htmlFor="user-type">
+            <Label htmlFor="user-type" className="font-bold text-[#1c1b1c] text-lg">
               {userType === "creator" ? "Creator" : "Editor"}
             </Label>
           </div>
@@ -50,7 +47,7 @@ export default function LandingPage() {
               : "Craft high-quality content for creators"}
           </h1>
 
-          <p className="mx-auto max-w-2xl text-gray-600 text-xl">
+          <p className="mx-auto px-3 max-w-2xl text-gray-600 text-xl">
             Edit Bridge connects creators and editors for seamless content
             collaboration. Streamline your workflow and focus on what matters
             most - creating great content.
@@ -60,92 +57,99 @@ export default function LandingPage() {
             Get Started <ChevronRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
-
-        <section className="mx-auto px-4 py-16 w-full max-w-6xl">
-          <h2 className="mb-12 font-bold text-3xl text-center">How It Works</h2>
-          <div className="space-y-24">
-            <HowItWorksStep
-              step={1}
-              title="Create Your Profile"
-              description="Set up your account as a creator or editor. Showcase your skills, experience, and portfolio to attract the right collaborators."
-              videoSrc="/videos/vid1.mp4"
-            />
-            <HowItWorksStep
-              step={2}
-              title="Connect and Collaborate"
-              description="Creators can browse and hire editors, while editors can apply for projects. Use our intuitive platform to communicate and share files seamlessly."
-              videoSrc="/videos/vid2.mp4"
-              reverse
-            />
-            <HowItWorksStep
-              step={3}
-              title="Review and Approve"
-              description="Creators can easily review edited content, provide feedback, and approve final versions. Our streamlined process ensures quick turnaround times."
-              videoSrc="/videos/vid3.mp4"
-            />
-            <HowItWorksStep
-              step={4}
-              title="Publish and Grow"
-              description="Once approved, publish your content directly to various platforms. Track performance and build long-term relationships with your favorite collaborators."
-              videoSrc="/videos/vid4.mp4"
-              reverse
-            />
-          </div>
-        </section>
-
-        <section className="mx-auto px-4 py-16 w-full max-w-6xl">
-          <h2 className="mb-8 font-bold text-3xl text-center">Key Features</h2>
-          <div className="gap-8 grid md:grid-cols-3">
-            <FeatureCard
-              icon={<Edit3 className="w-8 h-8" />}
-              title="Effortless Collaboration"
-              description="Hire editors directly and review content with a user-friendly approval process."
-            />
-            <FeatureCard
-              icon={<Zap className="w-8 h-8" />}
-              title="Streamlined Posting"
-              description="Once approved, content is ready for direct posting across platforms like YouTube, Twitter, and Instagram."
-            />
-            <FeatureCard
-              icon={<CreditCard className="w-8 h-8" />}
-              title="Flexible Plans"
-              description="Choose between Basic and Personal plans to suit your needs and budget."
-            />
-          </div>
-        </section>
-
-        <section className="mx-auto px-4 py-16 w-full max-w-6xl">
-          <h2 className="mb-12 font-bold text-3xl text-center">Testimonials</h2>
-          <div className="gap-8 grid md:grid-cols-2">
-            <TestimonialCard
-              quote="Edit Bridge has revolutionized my content creation process. I can focus on ideas while talented editors bring my vision to life."
-              author="Sarah J., YouTube Creator"
-            />
-            <TestimonialCard
-              quote="As a freelance editor, Edit Bridge has connected me with amazing creators and steady work. The platform is intuitive and a joy to use."
-              author="Mark T., Professional Editor"
-            />
-          </div>
-        </section>
-
-        <section className="bg-primary mx-auto px-4 py-16 rounded-lg w-full max-w-6xl text-primary-foreground">
-          <div className="space-y-4 text-center">
-            <h2 className="font-bold text-3xl">
-              Ready to streamline your content creation?
+        <div className="flex flex-col flex-grow justify-center items-center bg-[url('/bg/body.jpg')] bg-cover bg-no-repeat bg-center text-center">
+          <section className="mx-auto px-4 py-16 w-full max-w-6xl">
+            <h2 className="mb-12 font-bold text-3xl text-center">
+              How It Works
             </h2>
-            <p className="text-xl">
-              Join Edit Bridge today and experience seamless collaboration.
-            </p>
-            <Button
-              size="lg"
-              onClick={handleGetStarted}
-              variant="secondary"
-              className="mt-4"
-            >
-              Get Started Now <ChevronRight className="ml-2 w-5 h-5" />
-            </Button>
-          </div>
-        </section>
+            <div className="space-y-24">
+              <HowItWorksStep
+                step={1}
+                title="Create Your Profile"
+                description="Set up your account as a creator or editor. Showcase your skills, experience, and portfolio to attract the right collaborators."
+                videoSrc="/videos/vid1.mp4"
+              />
+              <HowItWorksStep
+                step={2}
+                title="Connect and Collaborate"
+                description="Creators can browse and hire editors, while editors can apply for projects. Use our intuitive platform to communicate and share files seamlessly."
+                videoSrc="/videos/vid2.mp4"
+                reverse
+              />
+              <HowItWorksStep
+                step={3}
+                title="Review and Approve"
+                description="Creators can easily review edited content, provide feedback, and approve final versions. Our streamlined process ensures quick turnaround times."
+                videoSrc="/videos/vid3.mp4"
+              />
+              <HowItWorksStep
+                step={4}
+                title="Publish and Grow"
+                description="Once approved, publish your content directly to various platforms. Track performance and build long-term relationships with your favorite collaborators."
+                videoSrc="/videos/vid4.mp4"
+                reverse
+              />
+            </div>
+          </section>
+
+          <section className="mx-auto px-4 py-16 w-full max-w-6xl">
+            <h2 className="mb-8 font-bold text-3xl text-center">
+              Key Features
+            </h2>
+            <div className="gap-8 grid md:grid-cols-3">
+              <FeatureCard
+                icon={<Edit3 className="w-8 h-8" />}
+                title="Effortless Collaboration"
+                description="Hire editors directly and review content with a user-friendly approval process."
+              />
+              <FeatureCard
+                icon={<Zap className="w-8 h-8" />}
+                title="Streamlined Posting"
+                description="Once approved, content is ready for direct posting across platforms like YouTube, Twitter, and Instagram."
+              />
+              <FeatureCard
+                icon={<CreditCard className="w-8 h-8" />}
+                title="Flexible Plans"
+                description="Choose between Basic and Personal plans to suit your needs and budget."
+              />
+            </div>
+          </section>
+
+          <section className="mx-auto px-4 py-16 w-full max-w-6xl">
+            <h2 className="mb-12 font-bold text-3xl text-center">
+              Testimonials
+            </h2>
+            <div className="gap-8 grid md:grid-cols-2">
+              <TestimonialCard
+                quote="Edit Bridge has revolutionized my content creation process. I can focus on ideas while talented editors bring my vision to life."
+                author="Sarah J., YouTube Creator"
+              />
+              <TestimonialCard
+                quote="As a freelance editor, Edit Bridge has connected me with amazing creators and steady work. The platform is intuitive and a joy to use."
+                author="Mark T., Professional Editor"
+              />
+            </div>
+          </section>
+
+          <section className="bg-primary mx-auto px-4 py-16 rounded-lg w-full max-w-6xl text-primary-foreground">
+            <div className="space-y-4 text-center">
+              <h2 className="font-bold text-3xl">
+                Ready to streamline your content creation?
+              </h2>
+              <p className="text-xl">
+                Join Edit Bridge today and experience seamless collaboration.
+              </p>
+              <Button
+                size="lg"
+                onClick={handleGetStarted}
+                variant="secondary"
+                className="mt-4"
+              >
+                Get Started Now <ChevronRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
+          </section>
+        </div>
       </main>
 
       <footer className="border-gray-200 mx-auto px-4 py-8 border-t w-full max-w-6xl text-center text-gray-500">
