@@ -12,12 +12,12 @@
   - [x] Hire / Apply 
   - [x] Manage / Pending Team Request
   - [ ] Manage Video's (Creator Side)
-      - [ ] Edit
+      - [x] Edit
       - [x] Approve
-      - [ ] Upload
+      - [x] Upload
   - [ ] Mange Video's (Editor Side)
-      - [ ] Edit
+      - [x] Edit
       - [x] Send for review
-- [ ] Delete Video + video request after 1 week
+- [x] Delete Video + video request after 1 week
   
         
